@@ -10,16 +10,16 @@
     <div class="form-box">
         <div class="button-box">
             <div id="btn"></div>
-            <button type="button" class="toggle-btn">Log in</button>
-            <button type="button" class="toggle-btn">Register</button>
+            <button type="button" class="toggle-btn" onclick="login()">Log in</button>
+            <button type="button" class="toggle-btn" onclick="register()">Register</button>
         </div>
-        <form class="input-group">
+        <form id="login" class="input-group">
             <input type="text" placeholder="USER ID" class="input-field">
             <input type="text" placeholder="ENTER PASSWORD" class="input-field">
             <input type="checkbox" class="checkbox"><span>Remember password</span>
             <button type="submit" class="submit-btn">Log in</button>
         </form>
-        <form class="input-group">
+        <form id="register" class="input-group">
             <input type="text" placeholder="USER ID" class="input-field">
             <input type="text" placeholder="EMAIL ID" class="input-field">
             <input type="text" placeholder="ENTER PASSWORD" class="input-field">
