@@ -68,4 +68,6 @@
 span{
     color:#777;
     font-size: 16px;
+    bottom: 68px;
+    position: absolute;
 }
