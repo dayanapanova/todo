@@ -3,14 +3,20 @@
     padding: 0;
     font-family: sans-serif;
 }
+body{
+    background-image: url(https://wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-4.jpg);
+    background-size: cover;
+    background-position: center;
+}
 .form-box {
     width: 380px;
-    height: 400px;
+    height: 450px;
     position: relative;
     margin: 6% auto;
     padding: 5px 0;
     background-color: #fff;
     border: 1px solid #999;
+    overflow: hidden;
 }
 .button-box {
     width: 220px;
