@@ -7,7 +7,7 @@ const registerBtn = document.getElementById("register-btn");
 const activeMarker = document.getElementById("active-marker");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
-const registerButton = document.getElementById("register-btn");
+const submitRegisterBtn = document.getElementById("submit-register-btn");
 
 const login = () => {
     registerForm.style.left = "-400px";
@@ -33,8 +33,8 @@ const setUserData = (ev) => {
     console.log(localStorage.getItem(LOCALSTORAGE_KEYS.userData)); 
 };
 
-registerButton.onclick = setUserData;
 loginBtn.onclick = login;
 registerBtn.onclick = register;
+submitRegisterBtn.onclick = setUserData;
 
 
