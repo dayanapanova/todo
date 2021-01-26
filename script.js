@@ -14,19 +14,17 @@ function login() {
 }
 const registerButton = document.querySelector("#register-btn");
 
-const getFormData = (e) => {
+const setUserData = (ev) => {
+    ev.preventDefault();
     let formData = {
-        firstname:document.getElementById('firstName').value,
-        lastname:document.getElementById('lastName').value,
-        email:document.getElementById('email').value,
-        password:document.getElementById('password').value
+        firstname:document.getElementById('register-firstName').value,
+        lastname:document.getElementById('register-lastName').value,
+        email:document.getElementById('register-email').value,
+        password:document.getElementById('register-password').value
     }
     localStorage.setItem('formedData',JSON.stringify(formData));
     console.log(localStorage.getItem('formedData')); 
 };
-registerButton.onclick = event => {
-    event.preventDefault();
-    getFormData();   
-}
+registerButton.onclick = setUserData;
 
 
