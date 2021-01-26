@@ -33,7 +33,7 @@ body{
     outline: none;
     position: relative;
 }
-#btn {
+#active-marker {
     top: 0;
     left: 0;
     position: absolute;
@@ -77,9 +77,9 @@ span{
     bottom: 68px;
     position: absolute;
 }
-#login{
+#login-form{
     left:50px;
 }
-#register {
+#register-form {
     left:450px;
 }

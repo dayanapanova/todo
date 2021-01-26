@@ -1,18 +1,25 @@
-const getLogin = document.getElementById("login");
-const getRegister = document.getElementById("register");
-const btn = document.getElementById("btn");
+const LOCALSTORAGE_KEYS = {
+    userData: 'userData',   
+}
 
-function register() {
-    getRegister.style.left = "-400px"
-    getLogin.style.left = "50px";
-    btn.style.left = "110px";
+const loginBtn = document.getElementById("login-btn");
+const registerBtn = document.getElementById("register-btn");
+const activeMarker = document.getElementById("active-marker");
+const loginForm = document.getElementById("login-form");
+const registerForm = document.getElementById("register-form");
+const registerButton = document.getElementById("register-btn");
+
+const login = () => {
+    registerForm.style.left = "-400px";
+    loginForm.style.left = "50px";
+    activeMarker.style.left = "0px";
 }
-function login() {
-    getRegister.style.left = "50px"
-    getLogin.style.left = "450px";
-    btn.style.left = "0px";
+
+const register = () => {
+    registerForm.style.left = "50px";
+    loginForm.style.left = "450px";
+    activeMarker.style.left = "110px";
 }
-const registerButton = document.querySelector("#register-btn");
 
 const setUserData = (ev) => {
     ev.preventDefault();
@@ -22,9 +29,12 @@ const setUserData = (ev) => {
         email:document.getElementById('register-email').value,
         password:document.getElementById('register-password').value
     }
-    localStorage.setItem('formedData',JSON.stringify(formData));
-    console.log(localStorage.getItem('formedData')); 
+    localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(formData));
+    console.log(localStorage.getItem(LOCALSTORAGE_KEYS.userData)); 
 };
+
 registerButton.onclick = setUserData;
+loginBtn.onclick = login;
+registerBtn.onclick = register;
 
 

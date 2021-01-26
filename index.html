@@ -9,17 +9,17 @@
 <body>
     <div class="form-box">
         <div class="button-box">
-            <div id="btn"></div>
-            <button type="button" class="toggle-btn" onclick="login()">Register</button>
-            <button type="button" class="toggle-btn" onclick="register()">Login</button>
+            <div id="active-marker"></div>
+            <button id="login-btn" type="button" class="toggle-btn">Login</button>
+            <button id="register-btn" type="button" class="toggle-btn">Register</button>
         </div>
-        <form id="login" class="input-group">
+        <form id="login-form" class="input-group">
             <input id="login-email" type="email" placeholder="EMAIL" class="input-field">
             <input id="login-password" type="password" placeholder="ENTER PASSWORD" class="input-field">
             <input type="checkbox" class="checkbox"><span>Remember password</span>
             <button type="submit" class="submit-btn">Log in</button>
         </form>
-        <form id="register" class="input-group">
+        <form id="register-form" class="input-group">
             <input id="register-firstName" type="text" placeholder="First name" class="input-field">
             <input id="register-lastName" type="text" placeholder="Last name" class="input-field">
             <input id="register-email"type="email" placeholder="EMAIL" class="input-field">
