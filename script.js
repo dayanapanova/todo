@@ -1,5 +1,6 @@
 const LOCALSTORAGE_KEYS = {
-    userData: 'userData',   
+    userData: 'userData',
+    isAuthentificated: "isAuthentificated"
 }
 
 const loginBtn = document.getElementById("login-btn");
@@ -10,16 +11,20 @@ const registerForm = document.getElementById("register-form");
 const submitRegisterBtn = document.getElementById("submit-register-btn");
 const submitLoginBtn = document.getElementById("submit-login-btn");
 
-const login = () => {
+const setLoginTab = () => {
     registerForm.style.left = "-400px";
     loginForm.style.left = "50px";
     activeMarker.style.left = "0px";
 }
 
-const register = () => {
+const setRegisterTab = () => {
     registerForm.style.left = "50px";
     loginForm.style.left = "450px";
     activeMarker.style.left = "110px";
+}
+
+const login = () => {
+    localStorage.setItem(LOCALSTORAGE_KEYS.isAuthentificated, "true");
 }
 
 const checkUser = (ev) => {
@@ -29,7 +34,7 @@ const checkUser = (ev) => {
     const loginEmail = document.getElementById("login-email").value;
     const loginPassword = document.getElementById("login-password").value;
     if(loginEmail === userData.email && loginPassword === userData.password) {
-        console.log("success login")
+        login();
     } else {
         console.log("did not success");
     }
@@ -46,8 +51,8 @@ const setUserData = (ev) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(userData)); 
 };
 
-loginBtn.onclick = login;
-registerBtn.onclick = register;
+loginBtn.onclick = setLoginTab;
+registerBtn.onclick = setRegisterTab;
 submitRegisterBtn.onclick = setUserData;
 submitLoginBtn.onclick = checkUser;
 
