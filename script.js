@@ -30,18 +30,18 @@ const login = () => {
 
 const checkUser = (ev) => {
     ev.preventDefault();
-    const userData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData));
-    console.log(userData);
+    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
     const loginEmail = document.getElementById("login-email").value;
     const loginPassword = document.getElementById("login-password").value;
-    if(loginEmail === userData.email && loginPassword === userData.password) {
+    const selectedUser = usersData.filter((user) => user.email === loginEmail)[0] ?? {};
+    if(loginPassword === selectedUser.password) {
         login();
     } else {
         console.log("did not success");
     }
 }
 
-const setUserData = (ev) => {
+const createUser = (ev) => {
     ev.preventDefault();
     const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
     const newUser = {
@@ -49,14 +49,15 @@ const setUserData = (ev) => {
         lastname:document.getElementById('register-lastName').value,
         email:document.getElementById('register-email').value,
         password:document.getElementById('register-password').value
-    }
+    };
+    //TODO: check if user exist
     const usersData = [...localStorageCurrentUsers,newUser];
     localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
 };
 
 loginBtn.onclick = setLoginTab;
 registerBtn.onclick = setRegisterTab;
-submitRegisterBtn.onclick = setUserData;
+submitRegisterBtn.onclick = createUser;
 submitLoginBtn.onclick = checkUser;
 
 
