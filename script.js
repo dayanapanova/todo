@@ -25,6 +25,7 @@ const setRegisterTab = () => {
 
 const login = () => {
     localStorage.setItem(LOCALSTORAGE_KEYS.isAuthentificated, "true");
+    // TODO:redirect to list screen
 }
 
 const checkUser = (ev) => {
@@ -42,13 +43,15 @@ const checkUser = (ev) => {
 
 const setUserData = (ev) => {
     ev.preventDefault();
-    const userData = {
+    const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
+    const newUser = {
         firstname:document.getElementById('register-firstName').value,
         lastname:document.getElementById('register-lastName').value,
         email:document.getElementById('register-email').value,
         password:document.getElementById('register-password').value
     }
-    localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(userData)); 
+    const usersData = [...localStorageCurrentUsers,newUser];
+    localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
 };
 
 loginBtn.onclick = setLoginTab;
