@@ -10,6 +10,10 @@ const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
 const submitRegisterBtn = document.getElementById("submit-register-btn");
 const submitLoginBtn = document.getElementById("submit-login-btn");
+const dashboardScreen = document.getElementById("dashboard-screen");
+const authScreen = document.getElementById("auth-screen");
+const logOutBtn = document.getElementById("log-out");
+const isAuthentificated = localStorage.getItem(LOCALSTORAGE_KEYS.isAuthentificated) === "true";
 
 const setLoginTab = () => {
     registerForm.style.left = "-400px";
@@ -23,9 +27,24 @@ const setRegisterTab = () => {
     activeMarker.style.left = "110px";
 }
 
-const login = () => {
+const goToDashboard = () => {
+    authScreen.style.display = "none";
+    dashboardScreen.style.display = "block";
+}
+
+const goToAuthScreen = () => {
+    dashboardScreen.style.display = "none";
+    authScreen.style.display = "block"
+}
+
+const authentificate = () => {
     localStorage.setItem(LOCALSTORAGE_KEYS.isAuthentificated, "true");
-    // TODO:=redirect to list screen
+    goToDashboard();
+}
+
+const logOut = () => {
+    localStorage.removeItem(LOCALSTORAGE_KEYS.isAuthentificated);
+    goToAuthScreen();
 }
 
 //check in the login if the user exist and if the password is the user password. if not we create a new user.
@@ -36,9 +55,9 @@ const checkUser = (ev) => {
     const loginPassword = document.getElementById("login-password").value;
     const selectedUser = usersData.filter((user) => user.email === loginEmail)[0] ?? {};
     if(loginPassword === selectedUser.password) {
-        login();
+        authentificate();
     } else {
-        console.log("did not success");
+        alert("Wrong password");
     }
 }
 
@@ -66,5 +85,13 @@ loginBtn.onclick = setLoginTab;
 registerBtn.onclick = setRegisterTab;
 submitRegisterBtn.onclick = createUser;
 submitLoginBtn.onclick = checkUser;
+logOutBtn.onclick = logOut;
+window.onload = () => {
+    if(isAuthentificated) {
+        goToDashboard();
+    } else {
+        goToAuthScreen();
+    }
+};
 
 
