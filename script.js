@@ -43,16 +43,22 @@ const checkUser = (ev) => {
 
 const createUser = (ev) => {
     ev.preventDefault();
+    const newUserEmail = document.getElementById('register-email').value;
     const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
     const newUser = {
         firstname:document.getElementById('register-firstName').value,
         lastname:document.getElementById('register-lastName').value,
-        email:document.getElementById('register-email').value,
+        email:newUserEmail,
         password:document.getElementById('register-password').value
     };
     //TODO: check if user exist
-    const usersData = [...localStorageCurrentUsers,newUser];
-    localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
+    const userIsExist = localStorageCurrentUsers.filter((user) =>user.email === newUserEmail).length
+    if(!userIsExist) {
+        const usersData = [...localStorageCurrentUsers,newUser];
+        localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
+    }  else {
+        alert("User exist!")
+    }
 };
 
 loginBtn.onclick = setLoginTab;
