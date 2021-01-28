@@ -25,9 +25,10 @@ const setRegisterTab = () => {
 
 const login = () => {
     localStorage.setItem(LOCALSTORAGE_KEYS.isAuthentificated, "true");
-    // TODO:redirect to list screen
+    // TODO:=redirect to list screen
 }
 
+//check in the login if the user exist and if the password is the user password. if not we create a new user.
 const checkUser = (ev) => {
     ev.preventDefault();
     const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
@@ -51,13 +52,13 @@ const createUser = (ev) => {
         email:newUserEmail,
         password:document.getElementById('register-password').value
     };
-    //TODO: check if user exist
+    // check if user exist
     const userIsExist = localStorageCurrentUsers.filter((user) =>user.email === newUserEmail).length
     if(!userIsExist) {
         const usersData = [...localStorageCurrentUsers,newUser];
         localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
     }  else {
-        alert("User exist!")
+        alert("User exist!");
     }
 };
 
