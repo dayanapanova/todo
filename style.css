@@ -3,16 +3,11 @@
     padding: 0;
     font-family: sans-serif;
 }
-body{
-    background-image: url(https://wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-4.jpg);
-    background-size: cover;
-    background-position: center;
-}
 .form-box {
     width: 380px;
     height: 480px;
     position: relative;
-    margin: 6% auto;
+    margin: 0 auto;
     padding: 5px 0;
     background-color: #fff;
     border: 1px solid #999;
@@ -85,4 +80,13 @@ span{
 }
 .dashboard {
     color: white;
+}
+.auth-screen {
+    background-image: url(https://wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-4.jpg);
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
