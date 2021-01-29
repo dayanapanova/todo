@@ -1,6 +1,6 @@
 const LOCALSTORAGE_KEYS = {
-    userData: 'userData',
-    isAuthentificated: "isAuthentificated"
+    USERS_DATA: 'userData',
+    CURRENT_USER: 'currentUser'
 }
 
 const loginBtn = document.getElementById("login-btn");
@@ -13,7 +13,7 @@ const submitLoginBtn = document.getElementById("submit-login-btn");
 const dashboardScreen = document.getElementById("dashboard-screen");
 const authScreen = document.getElementById("auth-screen");
 const logOutBtn = document.getElementById("log-out");
-const isAuthentificated = localStorage.getItem(LOCALSTORAGE_KEYS.isAuthentificated) === "true";
+const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
 const setLoginTab = () => {
     registerForm.style.left = "-400px";
@@ -37,25 +37,25 @@ const goToAuthScreen = () => {
     authScreen.style.display = "block"
 }
 
-const authentificate = () => {
-    localStorage.setItem(LOCALSTORAGE_KEYS.isAuthentificated, "true");
+const authentificate = (email) => {
+    localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
     goToDashboard();
 }
 
 const logOut = () => {
-    localStorage.removeItem(LOCALSTORAGE_KEYS.isAuthentificated);
+    localStorage.removeItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     goToAuthScreen();
 }
 
 //check in the login if the user exist and if the password is the user password. if not we create a new user.
 const checkUser = (ev) => {
     ev.preventDefault();
-    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
+    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
     const loginEmail = document.getElementById("login-email").value;
     const loginPassword = document.getElementById("login-password").value;
     const selectedUser = usersData.filter((user) => user.email === loginEmail)[0] ?? {};
     if(loginPassword === selectedUser.password) {
-        authentificate();
+        authentificate(loginEmail);
     } else {
         alert("Wrong password");
     }
@@ -64,7 +64,7 @@ const checkUser = (ev) => {
 const createUser = (ev) => {
     ev.preventDefault();
     const newUserEmail = document.getElementById('register-email').value;
-    const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.userData)) ?? [];
+    const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
     const newUser = {
         firstname:document.getElementById('register-firstName').value,
         lastname:document.getElementById('register-lastName').value,
@@ -75,8 +75,8 @@ const createUser = (ev) => {
     const userIsExist = localStorageCurrentUsers.filter((user) =>user.email === newUserEmail).length
     if(!userIsExist) {
         const usersData = [...localStorageCurrentUsers,newUser];
-        localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
-        authentificate();
+        localStorage.setItem(LOCALSTORAGE_KEYS.USERS_DATA,JSON.stringify(usersData));
+        authentificate(newUserEmail);
     }  else {
         alert("User exist!");
     }
