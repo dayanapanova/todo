@@ -28,15 +28,22 @@ const setRegisterTab = () => {
     activeMarker.style.left = "110px";
 }
 
+const renderDashboard = () => {
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    currentUserData = getCurrentUser(currentUserEmail);
+    console.log(currentUserData);
+};
+
 const goToDashboard = () => {
     authScreen.style.display = "none";
     dashboardScreen.style.display = "block";
-}
+    renderDashboard();
+};
 
 const goToAuthScreen = () => {
     dashboardScreen.style.display = "none";
     authScreen.style.display = "block"
-}
+};
 
 const getCurrentUser = (email) => {
     const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
@@ -45,8 +52,6 @@ const getCurrentUser = (email) => {
 
 const authentificate = (email) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
-    currentUserData = getCurrentUser(email);
-    console.log(currentUserData);
     goToDashboard();
 };
 
