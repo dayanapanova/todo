@@ -14,6 +14,7 @@ const dashboardScreen = document.getElementById("dashboard-screen");
 const authScreen = document.getElementById("auth-screen");
 const logOutBtn = document.getElementById("log-out");
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
+let currentUserData = {};
 
 const setLoginTab = () => {
     registerForm.style.left = "-400px";
@@ -37,23 +38,30 @@ const goToAuthScreen = () => {
     authScreen.style.display = "block"
 }
 
+const getCurrentUser = (email) => {
+    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
+    return usersData.filter((user) => user.email === email)[0] ?? {};
+};
+
 const authentificate = (email) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
+    currentUserData = getCurrentUser(email);
+    console.log(currentUserData);
     goToDashboard();
-}
+};
 
 const logOut = () => {
     localStorage.removeItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     goToAuthScreen();
-}
+};
+
 
 //check in the login if the user exist and if the password is the user password. if not we create a new user.
 const checkUser = (ev) => {
     ev.preventDefault();
-    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
     const loginEmail = document.getElementById("login-email").value;
     const loginPassword = document.getElementById("login-password").value;
-    const selectedUser = usersData.filter((user) => user.email === loginEmail)[0] ?? {};
+    const selectedUser = getCurrentUser(loginEmail);
     if(loginPassword === selectedUser.password) {
         authentificate(loginEmail);
     } else {
