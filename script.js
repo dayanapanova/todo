@@ -76,6 +76,7 @@ const createUser = (ev) => {
     if(!userIsExist) {
         const usersData = [...localStorageCurrentUsers,newUser];
         localStorage.setItem(LOCALSTORAGE_KEYS.userData,JSON.stringify(usersData));
+        authentificate();
     }  else {
         alert("User exist!");
     }
