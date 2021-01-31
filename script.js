@@ -39,6 +39,8 @@ const getLocalStorageArray = (key) => {
     return JSON.parse(localStorage.getItem(key)) ?? [];
 };
 
+const setLocalStorage = (key,data) => localStorage.setItem(key,JSON.stringify(data)); 
+
 const filterCurrentUserLists = (lists) => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     return lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
@@ -52,7 +54,7 @@ const createTask = (listID) => {
         name: 'test',
     }
     const taskData = [...localStorageTasks, newTask];
-    localStorage.setItem(LOCALSTORAGE_KEYS.TASKS, JSON.stringify(taskData));
+    setLocalStorage(LOCALSTORAGE_KEYS.TASKS,taskData);
     renderLists();
 };
 
@@ -111,7 +113,7 @@ const createList = () => {
         userEmail: currentUserEmail,
     };
     const listsData = [...localStorageLists, newList];
-    localStorage.setItem(LOCALSTORAGE_KEYS.LISTS, JSON.stringify(listsData));
+    setLocalStorage(LOCALSTORAGE_KEYS.LISTS,listsData);
     appendLists(listsData);
 };
 
@@ -170,7 +172,7 @@ const createUser = (ev) => {
     const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserEmail).length
     if (!userIsExist) {
         const usersData = [...localStorageCurrentUsers, newUser];
-        localStorage.setItem(LOCALSTORAGE_KEYS.USERS_DATA, JSON.stringify(usersData));
+        setLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA,usersData);
         authentificate(newUserEmail);
     } else {
         alert("User exist!");
