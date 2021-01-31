@@ -54,15 +54,15 @@ const createTask = (listID) => {
     const taskData = [...localStorageTasks, newTask];
     localStorage.setItem(LOCALSTORAGE_KEYS.TASKS, JSON.stringify(taskData));
     renderLists();
-
 };
-const renderTaskItem = (id,name) => (
+
+const taskItem = (id,name) => (
     `<div>
         <h6>${name}</h6>
     </div>`
 )
 
-const renderListItem = (id, name) => {
+const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
     console.log(currentListTasks);
@@ -72,7 +72,7 @@ const renderListItem = (id, name) => {
             <input type="text"></input>
             <button id="create-task-btn" onclick="createTask(${id})">Create task</button>
             <div>
-                ${currentListTasks.map(({id,name}) => renderTaskItem(id,name))}
+                ${currentListTasks.map(({id,name}) => taskItem(id,name))}
             </div>
         </div>`
     )
@@ -81,7 +81,7 @@ const renderListItem = (id, name) => {
 
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
-    const listsDomData = currentUserLists.map(({ id, name }) => renderListItem(id, name));
+    const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
     listsEl.innerHTML = listsDomData;
 };
 
