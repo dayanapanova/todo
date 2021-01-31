@@ -1,7 +1,8 @@
 const LOCALSTORAGE_KEYS = {
     USERS_DATA: 'userData',
     CURRENT_USER: 'currentUser',
-    LISTS: 'lists' 
+    LISTS: 'lists',
+    TASKS: 'tasks'
 }
 
 // DOM Elements
@@ -44,23 +45,49 @@ const filterCurrentUserLists = (lists) => {
 };
 
 const createTask = (listID) => {
-    console.log(listID);
-}
+    const localStorageTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
+    const newTask = {
+        id:localStorageTasks.length + 1,
+        listID: listID,
+        name: 'test',
+    }
+    const taskData = [...localStorageTasks, newTask];
+    localStorage.setItem(LOCALSTORAGE_KEYS.TASKS, JSON.stringify(taskData));
+    renderLists();
+
+};
+const renderTaskItem = (id,name) => (
+    `<div>
+        <h6>${name}</h6>
+    </div>`
+)
+
+const renderListItem = (id, name) => {
+    const localStoragetTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
+    const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
+    console.log(currentListTasks);
+    return (
+        `<div>
+            <h1>${name}</h1>
+            <input type="text"></input>
+            <button id="create-task-btn" onclick="createTask(${id})">Create task</button>
+            <div>
+                ${currentListTasks.map(({id,name}) => renderTaskItem(id,name))}
+            </div>
+        </div>`
+    )
+};
+
 
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
-    const listsDomData = currentUserLists.map(({name,id}) => (
-        `<div>
-        <h1>${name}</h1>
-        <button id="create-task-btn" onclick="createTask(${id})">Create task</button>
-        </div>`
-    ));
+    const listsDomData = currentUserLists.map(({ id, name }) => renderListItem(id, name));
     listsEl.innerHTML = listsDomData;
 };
 
 const renderHeader = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    const {firstname,lastname} = getCurrentUser(currentUserEmail);
+    const { firstname, lastname } = getCurrentUser(currentUserEmail);
     userInfoEl.innerHTML = `${firstname} ${lastname}`;
 };
 
@@ -79,14 +106,14 @@ const createList = () => {
     const listName = listNameInputEl.value;
     const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
     const newList = {
-        id:localStorageLists.length + 1,
-        name:listName,
-        userEmail:currentUserEmail,
+        id: localStorageLists.length + 1,
+        name: listName,
+        userEmail: currentUserEmail,
     };
-    const listsData = [...localStorageLists,newList];
+    const listsData = [...localStorageLists, newList];
     localStorage.setItem(LOCALSTORAGE_KEYS.LISTS, JSON.stringify(listsData));
     appendLists(listsData);
-}; 
+};
 
 const goToDashboard = () => {
     authScreenEl.style.display = "none";
@@ -122,7 +149,7 @@ const checkUser = (ev) => {
     const loginEmail = document.getElementById("login-email").value;
     const loginPassword = document.getElementById("login-password").value;
     const selectedUser = getCurrentUser(loginEmail);
-    if(loginPassword === selectedUser.password) {
+    if (loginPassword === selectedUser.password) {
         authentificate(loginEmail);
     } else {
         alert("Wrong password");
@@ -134,18 +161,18 @@ const createUser = (ev) => {
     const newUserEmail = document.getElementById('register-email').value;
     const localStorageCurrentUsers = getLocalStorageArray(LOCALSTORAGE_KEYS.USERS_DATA);
     const newUser = {
-        firstname:document.getElementById('register-firstName').value,
-        lastname:document.getElementById('register-lastName').value,
-        email:newUserEmail,
-        password:document.getElementById('register-password').value
+        firstname: document.getElementById('register-firstName').value,
+        lastname: document.getElementById('register-lastName').value,
+        email: newUserEmail,
+        password: document.getElementById('register-password').value
     };
     // check if user exist
-    const userIsExist = localStorageCurrentUsers.filter((user) =>user.email === newUserEmail).length
-    if(!userIsExist) {
-        const usersData = [...localStorageCurrentUsers,newUser];
-        localStorage.setItem(LOCALSTORAGE_KEYS.USERS_DATA,JSON.stringify(usersData));
+    const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserEmail).length
+    if (!userIsExist) {
+        const usersData = [...localStorageCurrentUsers, newUser];
+        localStorage.setItem(LOCALSTORAGE_KEYS.USERS_DATA, JSON.stringify(usersData));
         authentificate(newUserEmail);
-    }  else {
+    } else {
         alert("User exist!");
     }
 };
@@ -157,7 +184,7 @@ submitLoginBtnEl.onclick = checkUser;
 logOutBtnEl.onclick = logOut;
 createListBtnEl.onclick = createList;
 window.onload = () => {
-    if(isAuthentificated) {
+    if (isAuthentificated) {
         goToDashboard();
     } else {
         goToAuthScreen();
