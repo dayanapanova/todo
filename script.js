@@ -30,11 +30,14 @@ const setRegisterTab = () => {
     activeMarkerEl.style.left = "110px";
 }
 
-const renderDashboard = () => {
+const renderHeader = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     const {firstname,lastname} = getCurrentUser(currentUserEmail);
     userInfoEl.innerHTML = `${firstname} ${lastname}`;
-    console.log(userInfoEl);
+};
+
+const renderDashboard = () => {
+    renderHeader();
 };
 
 const goToDashboard = () => {
