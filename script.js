@@ -35,6 +35,16 @@ const setRegisterTab = () => {
     activeMarkerEl.style.left = "110px";
 };
 
+const generateUUID = () => {
+    let d = new Date().getTime();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
+
 const getLocalStorageArray = (key) => {
     return JSON.parse(localStorage.getItem(key)) ?? [];
 };
@@ -49,7 +59,7 @@ const filterCurrentUserLists = (lists) => {
 const createTask = (listID) => {
     const localStorageTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
     const newTask = {
-        id:localStorageTasks.length + 1,
+        id: generateUUID(),
         listID: listID,
         name: 'test',
     }
@@ -67,12 +77,11 @@ const taskItem = (id,name) => (
 const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
-    console.log(currentListTasks);
     return (
         `<div>
             <h1>${name}</h1>
             <input type="text"></input>
-            <button id="create-task-btn" onclick="createTask(${id})">Create task</button>
+            <button id="create-task-btn">Create task</button>
             <div>
                 ${currentListTasks.map(({id,name}) => taskItem(id,name))}
             </div>
@@ -108,7 +117,7 @@ const createList = () => {
     const listName = listNameInputEl.value;
     const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
     const newList = {
-        id: localStorageLists.length + 1,
+        id: generateUUID(),
         name: listName,
         userEmail: currentUserEmail,
     };
