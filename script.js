@@ -45,17 +45,56 @@ const generateUUID = () => {
     return uuid;
 };
 
-const getLocalStorageArray = (key) => JSON.parse(localStorage.getItem(key)) ?? [];
+// Local storage helpers
+const getLocalStorage = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) ?? defaultValue;
+const setLocalStorage = (key, data) => localStorage.setItem(key,JSON.stringify(data)); 
 
-const setLocalStorage = (key,data) => localStorage.setItem(key,JSON.stringify(data)); 
-
+// Returns lists for the current user that is logged in
 const filterCurrentUserLists = (lists) => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     return lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
 };
 
+// Function to create a user
+const createUser = (ev) => {
+    ev.preventDefault();
+    const newUserEmail = document.getElementById('register-email').value;
+    const localStorageCurrentUsers = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
+    const newUser = {
+        firstname: document.getElementById('register-firstName').value,
+        lastname: document.getElementById('register-lastName').value,
+        email: newUserEmail,
+        password: document.getElementById('register-password').value
+    };
+    // check if user exist
+    const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserEmail).length
+    if (!userIsExist) {
+        const usersData = [...localStorageCurrentUsers, newUser];
+        setLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA,usersData);
+        authentificate(newUserEmail);
+    } else {
+        alert("User exist!");
+    }
+};
+
+// Get the current user email and creates a new list 
+const createList = () => {
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    const listName = listNameInputEl.value;
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+    const newList = {
+        id: generateUUID(),
+        name: listName,
+        userEmail: currentUserEmail,
+    };
+    const listsData = [...localStorageLists, newList];
+    setLocalStorage(LOCALSTORAGE_KEYS.LISTS,listsData);
+    appendLists(listsData);
+};
+
+// TODO: Handle this function
 const createTask = (listID) => {
-    const localStorageTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
+    const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const newTask = {
         id: generateUUID(),
         listID: listID,
@@ -66,6 +105,7 @@ const createTask = (listID) => {
     renderLists();
 };
 
+// TODO : 
 const taskItem = (id,name) => (
     `<div>
         <h6>${name}</h6>
@@ -73,7 +113,7 @@ const taskItem = (id,name) => (
 )
 
 const listItem = (id, name) => {
-    const localStoragetTasks = getLocalStorageArray(LOCALSTORAGE_KEYS.TASKS);
+    const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
     return (
         `<div>
@@ -101,27 +141,13 @@ const renderHeader = () => {
 };
 
 const renderLists = () => {
-    const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     appendLists(localStorageLists);
 }
 
 const renderDashboard = () => {
     renderHeader();
     renderLists();
-};
-
-const createList = () => {
-    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    const listName = listNameInputEl.value;
-    const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
-    const newList = {
-        id: generateUUID(),
-        name: listName,
-        userEmail: currentUserEmail,
-    };
-    const listsData = [...localStorageLists, newList];
-    setLocalStorage(LOCALSTORAGE_KEYS.LISTS,listsData);
-    appendLists(listsData);
 };
 
 const goToDashboard = () => {
@@ -136,7 +162,7 @@ const goToAuthScreen = () => {
 };
 
 const getCurrentUser = (email) => {
-    const usersData = getLocalStorageArray(LOCALSTORAGE_KEYS.USERS_DATA);
+    const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
     return usersData.filter((user) => user.email === email)[0] ?? {};
 };
 
@@ -162,27 +188,6 @@ const checkUser = (ev) => {
         authentificate(loginEmail);
     } else {
         alert("Wrong password");
-    }
-}
-
-const createUser = (ev) => {
-    ev.preventDefault();
-    const newUserEmail = document.getElementById('register-email').value;
-    const localStorageCurrentUsers = getLocalStorageArray(LOCALSTORAGE_KEYS.USERS_DATA);
-    const newUser = {
-        firstname: document.getElementById('register-firstName').value,
-        lastname: document.getElementById('register-lastName').value,
-        email: newUserEmail,
-        password: document.getElementById('register-password').value
-    };
-    // check if user exist
-    const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserEmail).length
-    if (!userIsExist) {
-        const usersData = [...localStorageCurrentUsers, newUser];
-        setLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA,usersData);
-        authentificate(newUserEmail);
-    } else {
-        alert("User exist!");
     }
 };
 
