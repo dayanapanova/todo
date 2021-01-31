@@ -36,13 +36,24 @@ const setRegisterTab = () => {
 
 const getLocalStorageArray = (key) => {
     return JSON.parse(localStorage.getItem(key)) ?? [];
-} 
+};
+
+const filterCurrentUserLists = (lists) => {
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    return lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
+};
+
+const createTask = (listID) => {
+    console.log(listID);
+}
 
 const appendLists = (lists) => {
-    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    const currentUserLists = lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
-    const listsDomData = currentUserLists.map(({name}) => (
-        `<div><h1>${name}</h1></div>`
+    const currentUserLists = filterCurrentUserLists(lists);
+    const listsDomData = currentUserLists.map(({name,id}) => (
+        `<div>
+        <h1>${name}</h1>
+        <button id="create-task-btn" onclick="createTask(${id})">Create task</button>
+        </div>`
     ));
     listsEl.innerHTML = listsDomData;
 };
