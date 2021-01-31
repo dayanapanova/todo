@@ -39,7 +39,9 @@ const getLocalStorageArray = (key) => {
 } 
 
 const appendLists = (lists) => {
-    const listsDomData = lists.map(({name}) => (
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    const currentUserLists = lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
+    const listsDomData = currentUserLists.map(({name}) => (
         `<div><h1>${name}</h1></div>`
     ));
     listsEl.innerHTML = listsDomData;
@@ -61,12 +63,14 @@ const renderDashboard = () => {
     renderLists();
 };
 
-const createNewList = () => {
+const createList = () => {
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     const listName = listNameInputEl.value;
     const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
     const newList = {
-        name:listName,
         id:localStorageLists.length + 1,
+        name:listName,
+        userEmail:currentUserEmail,
     };
     const listsData = [...localStorageLists,newList];
     localStorage.setItem(LOCALSTORAGE_KEYS.LISTS, JSON.stringify(listsData));
@@ -140,7 +144,7 @@ registerBtnEl.onclick = setRegisterTab;
 submitRegisterBtnEl.onclick = createUser;
 submitLoginBtnEl.onclick = checkUser;
 logOutBtnEl.onclick = logOut;
-createListBtnEl.onclick = createNewList;
+createListBtnEl.onclick = createList;
 window.onload = () => {
     if(isAuthentificated) {
         goToDashboard();
