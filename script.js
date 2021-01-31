@@ -3,46 +3,50 @@ const LOCALSTORAGE_KEYS = {
     CURRENT_USER: 'currentUser'
 }
 
-const loginBtn = document.getElementById("login-btn");
-const registerBtn = document.getElementById("register-btn");
-const activeMarker = document.getElementById("active-marker");
-const loginForm = document.getElementById("login-form");
-const registerForm = document.getElementById("register-form");
-const submitRegisterBtn = document.getElementById("submit-register-btn");
-const submitLoginBtn = document.getElementById("submit-login-btn");
-const dashboardScreen = document.getElementById("dashboard-screen");
-const authScreen = document.getElementById("auth-screen");
-const logOutBtn = document.getElementById("log-out");
+// DOM Elements
+const loginBtnEl = document.getElementById("login-btn");
+const registerBtnEl = document.getElementById("register-btn");
+const activeMarkerEl = document.getElementById("active-marker");
+const loginFormEl = document.getElementById("login-form");
+const registerFormEl = document.getElementById("register-form");
+const submitRegisterBtnEl = document.getElementById("submit-register-btn");
+const submitLoginBtnEl = document.getElementById("submit-login-btn");
+const dashboardScreenEl = document.getElementById("dashboard-screen");
+const authScreenEl = document.getElementById("auth-screen");
+const logOutBtnEl = document.getElementById("log-out");
+const userInfoEl = document.getElementById("user-info");
+
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
-let currentUserData = {};
 
 const setLoginTab = () => {
-    registerForm.style.left = "-400px";
-    loginForm.style.left = "50px";
-    activeMarker.style.left = "0px";
+    registerFormEl.style.left = "-400px";
+    loginFormEl.style.left = "50px";
+    activeMarkerEl.style.left = "0px";
 }
 
 const setRegisterTab = () => {
-    registerForm.style.left = "50px";
-    loginForm.style.left = "450px";
-    activeMarker.style.left = "110px";
+    registerFormEl.style.left = "50px";
+    loginFormEl.style.left = "450px";
+    activeMarkerEl.style.left = "110px";
 }
 
 const renderDashboard = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    currentUserData = getCurrentUser(currentUserEmail);
-    console.log(currentUserData);
+    const {firstname,lastname} = getCurrentUser(currentUserEmail);
+    const textNode = document.createTextNode(`${firstname} ${lastname}`)
+    userInfoEl.appendChild(textNode);
+    console.log(userInfoEl);
 };
 
 const goToDashboard = () => {
-    authScreen.style.display = "none";
-    dashboardScreen.style.display = "block";
+    authScreenEl.style.display = "none";
+    dashboardScreenEl.style.display = "block";
     renderDashboard();
 };
 
 const goToAuthScreen = () => {
-    dashboardScreen.style.display = "none";
-    authScreen.style.display = "block"
+    dashboardScreenEl.style.display = "none";
+    authScreenEl.style.display = "block"
 };
 
 const getCurrentUser = (email) => {
@@ -95,11 +99,11 @@ const createUser = (ev) => {
     }
 };
 
-loginBtn.onclick = setLoginTab;
-registerBtn.onclick = setRegisterTab;
-submitRegisterBtn.onclick = createUser;
-submitLoginBtn.onclick = checkUser;
-logOutBtn.onclick = logOut;
+loginBtnEl.onclick = setLoginTab;
+registerBtnEl.onclick = setRegisterTab;
+submitRegisterBtnEl.onclick = createUser;
+submitLoginBtnEl.onclick = checkUser;
+logOutBtnEl.onclick = logOut;
 window.onload = () => {
     if(isAuthentificated) {
         goToDashboard();
