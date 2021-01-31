@@ -18,6 +18,7 @@ const logOutBtnEl = document.getElementById("log-out");
 const userInfoEl = document.getElementById("user-info");
 const createListBtnEl = document.getElementById("create-list-btn");
 const listNameInputEl = document.getElementById("list-name-input");
+const listsEl = document.getElementById("lists");
 
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
@@ -33,25 +34,43 @@ const setRegisterTab = () => {
     activeMarkerEl.style.left = "110px";
 };
 
+const getLocalStorageArray = (key) => {
+    return JSON.parse(localStorage.getItem(key)) ?? [];
+} 
+
+const appendLists = (lists) => {
+    const listsDomData = lists.map(({name}) => (
+        `<div><h1>${name}</h1></div>`
+    ));
+    listsEl.innerHTML = listsDomData;
+};
+
 const renderHeader = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     const {firstname,lastname} = getCurrentUser(currentUserEmail);
     userInfoEl.innerHTML = `${firstname} ${lastname}`;
 };
 
+const renderLists = () => {
+    const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
+    appendLists(localStorageLists);
+}
+
 const renderDashboard = () => {
     renderHeader();
+    renderLists();
 };
 
-const  createNewList = () => {
-     const listName = listNameInputEl.value;
-     const localStorageLists = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.LISTS)) ?? [];
-     const newList = {
-         name:listName,
-         id:localStorageLists.length + 1,
-     }
-     const listsData = [...localStorageLists,newList];
-     localStorage.setItem(LOCALSTORAGE_KEYS.LISTS, JSON.stringify(listsData));
+const createNewList = () => {
+    const listName = listNameInputEl.value;
+    const localStorageLists = getLocalStorageArray(LOCALSTORAGE_KEYS.LISTS);
+    const newList = {
+        name:listName,
+        id:localStorageLists.length + 1,
+    };
+    const listsData = [...localStorageLists,newList];
+    localStorage.setItem(LOCALSTORAGE_KEYS.LISTS, JSON.stringify(listsData));
+    appendLists(listsData);
 }; 
 
 const goToDashboard = () => {
@@ -66,7 +85,7 @@ const goToAuthScreen = () => {
 };
 
 const getCurrentUser = (email) => {
-    const usersData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
+    const usersData = getLocalStorageArray(LOCALSTORAGE_KEYS.USERS_DATA);
     return usersData.filter((user) => user.email === email)[0] ?? {};
 };
 
@@ -98,7 +117,7 @@ const checkUser = (ev) => {
 const createUser = (ev) => {
     ev.preventDefault();
     const newUserEmail = document.getElementById('register-email').value;
-    const localStorageCurrentUsers = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USERS_DATA)) ?? [];
+    const localStorageCurrentUsers = getLocalStorageArray(LOCALSTORAGE_KEYS.USERS_DATA);
     const newUser = {
         firstname:document.getElementById('register-firstName').value,
         lastname:document.getElementById('register-lastName').value,
