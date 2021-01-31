@@ -45,9 +45,7 @@ const generateUUID = () => {
     return uuid;
 };
 
-const getLocalStorageArray = (key) => {
-    return JSON.parse(localStorage.getItem(key)) ?? [];
-};
+const getLocalStorageArray = (key) => JSON.parse(localStorage.getItem(key)) ?? [];
 
 const setLocalStorage = (key,data) => localStorage.setItem(key,JSON.stringify(data)); 
 
@@ -62,7 +60,7 @@ const createTask = (listID) => {
         id: generateUUID(),
         listID: listID,
         name: 'test',
-    }
+    };
     const taskData = [...localStorageTasks, newTask];
     setLocalStorage(LOCALSTORAGE_KEYS.TASKS,taskData);
     renderLists();
