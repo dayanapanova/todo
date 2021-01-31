@@ -33,8 +33,7 @@ const setRegisterTab = () => {
 const renderDashboard = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     const {firstname,lastname} = getCurrentUser(currentUserEmail);
-    const textNode = document.createTextNode(`${firstname} ${lastname}`)
-    userInfoEl.appendChild(textNode);
+    userInfoEl.innerHTML = `${firstname} ${lastname}`;
     console.log(userInfoEl);
 };
 
@@ -61,6 +60,7 @@ const authentificate = (email) => {
 
 const logOut = () => {
     localStorage.removeItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    userInfoEl.innerHTML = "";
     goToAuthScreen();
 };
 
