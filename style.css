@@ -1,8 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
 }
+
+body {
+    background-color: #f3f3f3;
+    font-family: 'Raleway', sans-serif;
+    color: #616060;
+    padding-top: 80px;
+}
+
 .form-box {
     width: 380px;
     height: 480px;
@@ -28,6 +37,7 @@
     outline: none;
     position: relative;
 }
+
 #active-marker {
     top: 0;
     left: 0;
@@ -72,12 +82,15 @@ span{
     bottom: 68px;
     position: absolute;
 }
+
 #login-form{
     left:50px;
 }
+
 #register-form {
     left:450px;
 }
+
 .auth-screen {
     background-image: url(https://wonderfulengineering.com/wp-content/uploads/2014/04/space-wallpapers-4.jpg);
     background-size: cover;
@@ -87,3 +100,119 @@ span{
     align-items: center;
     justify-content: center;
 }
+
+.header {
+    background-color: #fff;
+    position: fixed;
+    height: 60px;
+    top: 0;
+    right: 0;
+    left: 0;
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.header .logo {
+    color: #7169ea;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.header .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.header .user-name {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+.log-out {
+    border: 1px solid #7169ea;
+    background: transparent;
+    color: #7169ea;
+    text-transform: uppercase;
+    padding: 6px 8px;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+.log-out:hover {
+    background-color: #7169ea;
+    color: #fff;
+}
+
+.open-list-form-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #7169ea;
+    color: #fff;
+    position: fixed;
+    border-radius: 100%;
+    border: 0;
+    font-size: 32px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 1;
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
+    cursor: pointer;
+}
+
+.open-list-form-btn:hover,
+.open-list-form-btn:focus {
+    outline: none;
+    border: 0;
+}
+
+.modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(247 247 247 / 85%);
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal .modal-content {
+    background-color: #fff;
+    width: 400px;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
+}
+
+.modal .modal-head {
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.modal .modal-head .title {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.modal .modal-head .modal-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+}
+
