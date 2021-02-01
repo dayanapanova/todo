@@ -9,25 +9,45 @@
 <body>
     <div id="auth-screen">
         <div class="auth-screen">
-            <div class="form-box">
+            <div class="card">
                 <div class="button-box">
                     <div id="active-marker"></div>
                     <button id="login-btn" type="button" class="toggle-btn">Login</button>
                     <button id="register-btn" type="button" class="toggle-btn">Register</button>
                 </div>
-                <form id="login-form" class="input-group">
-                    <input id="login-email" type="email" placeholder="EMAIL" class="input-field">
-                    <input id="login-password" type="password" placeholder="ENTER PASSWORD" class="input-field">
-                    <input type="checkbox" class="checkbox"><span>Remember password</span>
-                    <button id="submit-login-btn"type="submit" class="submit-btn">Log in</button>
+                <form id="login-form" class="form">
+                    <div class="form-field">
+                        <input id="login-email" type="email" placeholder="EMAIL">
+                    </div>
+                    <div class="form-field">
+                        <input id="login-password" type="password" placeholder="ENTER PASSWORD">
+                    </div>
+                    <div class="form-field">
+                        <input type="checkbox"><span>Remember password</span>
+                    </div>
+                    <div class="form-btn">
+                        <button id="submit-login-btn"type="submit" class="btn">Log in</button>
+                    </div>
                 </form>
-                <form id="register-form" class="input-group">
-                    <input id="register-firstName" type="text" placeholder="First name" class="input-field">
-                    <input id="register-lastName" type="text" placeholder="Last name" class="input-field">
-                    <input id="register-email"type="email" placeholder="EMAIL" class="input-field">
-                    <input id="register-password"type="password" placeholder="ENTER PASSWORD" class="input-field">
-                    <input type="checkbox" class="checkbox"><span>I agree with the terms of use</span>
-                    <button id="submit-register-btn" type="submit" class="submit-btn">Register</button>
+                <form id="register-form" class="form">
+                    <div class="form-field">
+                        <input id="register-firstName" type="text" placeholder="First name">
+                    </div>
+                    <div class="form-field">
+                        <input id="register-lastName" type="text" placeholder="Last name">
+                    </div>
+                    <div class="form-field">
+                        <input id="register-email"type="email" placeholder="EMAIL">
+                    </div>
+                    <div class="form-field">
+                        <input id="register-password"type="password" placeholder="ENTER PASSWORD">
+                    </div>
+                    <div class="form-field">
+                        <input type="checkbox" class="checkbox"><span>I agree with the terms of use</span>
+                    </div>
+                    <div class="form-btn">
+                        <button id="submit-register-btn" type="submit" class="btn">Register</button>
+                    </div>
                 </form>
             </div>
         </div>
