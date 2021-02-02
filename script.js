@@ -149,6 +149,26 @@ const renderDashboard = () => {
     renderLists();
 };
 
+const changeTab = (currentTab) => {
+    allTabsItemsEls.forEach((tabItem) => {
+        const tabID = tabItem.getAttribute("data-tab");
+        console.log(tabID);
+        if(tabID === currentTab) {
+            tabItem.classList.add("active");
+        } else {
+            tabItem.classList.remove("active");
+        }
+    });
+    tabBtnEls.forEach((tabBtn) => {
+        const tabID = tabBtn.getAttribute("data-tab");
+        if(tabID === currentTab) {
+            tabBtn.classList.add("active");
+        } else {
+            tabBtn.classList.remove("active");
+        }
+    });
+};
+
 const goToDashboard = () => {
     authScreenEl.style.display = "none";
     dashboardScreenEl.style.display = "block";
@@ -157,7 +177,8 @@ const goToDashboard = () => {
 
 const goToAuthScreen = () => {
     dashboardScreenEl.style.display = "none";
-    authScreenEl.style.display = "block"
+    authScreenEl.style.display = "block";
+    changeTab("login-tab");
 };
 
 const getCurrentUser = (email) => {
@@ -176,28 +197,12 @@ const logOut = () => {
     goToAuthScreen();
 };
 
-const changeTab = (ev) => {
+const handleTabClick = (ev) => {
     const currentTab = ev.target.getAttribute("data-tab");
-    allTabsItemsEls.forEach((tabItem) => {
-        const tabID = tabItem.getAttribute("data-tab");
-        console.log(tabID);
-        if(tabID === currentTab) {
-            tabItem.classList.add("active");
-        } else {
-            tabItem.classList.remove("active");
-        }
-    });
-    tabBtnEls.forEach((tabBtn) => {
-        const tabID = tabBtn.getAttribute("data-tab");
-        if(tabID === currentTab) {
-            tabBtn.classList.add("active");
-        } else {
-            tabBtn.classList.remove("active");
-        }
-    })
-}
+    changeTab(currentTab);
+};
 
-tabBtnEls.forEach(tab => tab.onclick = changeTab); 
+tabBtnEls.forEach(tab => tab.onclick = handleTabClick); 
 submitRegisterBtnEl.onclick = register;
 submitLoginBtnEl.onclick = login;
 logOutBtnEl.onclick = logOut;
