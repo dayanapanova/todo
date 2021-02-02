@@ -150,23 +150,18 @@ const renderDashboard = () => {
 };
 
 const changeTab = (currentTab) => {
-    allTabsItemsEls.forEach((tabItem) => {
-        const tabID = tabItem.getAttribute("data-tab");
-        console.log(tabID);
-        if(tabID === currentTab) {
-            tabItem.classList.add("active");
-        } else {
-            tabItem.classList.remove("active");
-        }
-    });
-    tabBtnEls.forEach((tabBtn) => {
-        const tabID = tabBtn.getAttribute("data-tab");
-        if(tabID === currentTab) {
-            tabBtn.classList.add("active");
-        } else {
-            tabBtn.classList.remove("active");
-        }
-    });
+    const setActiveClassName = (tabs) => {
+        tabs.forEach((tabItem) => {
+            const tabID = tabItem.getAttribute("data-tab");
+            if(tabID === currentTab) {
+                tabItem.classList.add("active");
+            } else {
+                tabItem.classList.remove("active");
+            }
+        });
+    } 
+    setActiveClassName(allTabsItemsEls);
+    setActiveClassName(tabBtnEls);
 };
 
 const goToDashboard = () => {
