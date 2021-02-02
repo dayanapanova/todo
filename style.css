@@ -230,8 +230,47 @@ input::placeholder {
     background-color: #fff;
     width: 400px;
     box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
-    padding: 20px;
     border-radius: 6px;
+}
+
+.card-content {
+    padding:20px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tab-buttons .tab-btn {
+    width: 50%;
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
+    outline: none;
+    padding: 15px 20px;
+    text-transform: uppercase;
+}
+
+.tab-buttons .tab-btn.active {
+    color: #fff;
+    background-color: #7169ea;
+}
+
+.tab-buttons .tab-btn:first-child {
+    border-top-left-radius: 6px;
+}
+
+.tab-buttons .tab-btn:last-child {
+    border-top-right-radius: 6px;
+}
+
+.tab-item {
+    display: none;
+}
+
+.tab-item.active {
+    display: block;
 }
 
 

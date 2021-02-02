@@ -6,9 +6,8 @@ const LOCALSTORAGE_KEYS = {
 }
 
 // DOM Elements
-const loginBtnEl = document.getElementById("login-btn");
-const registerBtnEl = document.getElementById("register-btn");
-const activeMarkerEl = document.getElementById("active-marker");
+const tabBtnEls = document.querySelectorAll(".tab-btn");
+const allTabsItemsEls = document.querySelectorAll(".tab-item");
 const loginFormEl = document.getElementById("login-form");
 const registerFormEl = document.getElementById("register-form");
 const submitRegisterBtnEl = document.getElementById("submit-register-btn");
@@ -177,6 +176,28 @@ const logOut = () => {
     goToAuthScreen();
 };
 
+const changeTab = (ev) => {
+    const currentTab = ev.target.getAttribute("data-tab");
+    allTabsItemsEls.forEach((tabItem) => {
+        const tabID = tabItem.getAttribute("data-tab");
+        console.log(tabID);
+        if(tabID === currentTab) {
+            tabItem.classList.add("active");
+        } else {
+            tabItem.classList.remove("active");
+        }
+    });
+    tabBtnEls.forEach((tabBtn) => {
+        const tabID = tabBtn.getAttribute("data-tab");
+        if(tabID === currentTab) {
+            tabBtn.classList.add("active");
+        } else {
+            tabBtn.classList.remove("active");
+        }
+    })
+}
+
+tabBtnEls.forEach(tab => tab.onclick = changeTab); 
 submitRegisterBtnEl.onclick = register;
 submitLoginBtnEl.onclick = login;
 logOutBtnEl.onclick = logOut;
