@@ -23,18 +23,6 @@ const listsEl = document.getElementById("lists");
 
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
-const setLoginTab = () => {
-    registerFormEl.style.left = "-400px";
-    loginFormEl.style.left = "50px";
-    activeMarkerEl.style.left = "0px";
-}
-
-const setRegisterTab = () => {
-    registerFormEl.style.left = "50px";
-    loginFormEl.style.left = "450px";
-    activeMarkerEl.style.left = "110px";
-};
-
 const generateUUID = () => {
     let d = new Date().getTime();
     const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -56,7 +44,7 @@ const filterCurrentUserLists = (lists) => {
 };
 
 // Function to create a user
-const createUser = (ev) => {
+const register = (ev) => {
     ev.preventDefault();
     const newUserEmail = document.getElementById('register-email').value;
     const localStorageCurrentUsers = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
@@ -74,6 +62,18 @@ const createUser = (ev) => {
         authentificate(newUserEmail);
     } else {
         alert("User exist!");
+    }
+};
+
+const login = (ev) => {
+    ev.preventDefault();
+    const loginEmail = document.getElementById("login-email").value;
+    const loginPassword = document.getElementById("login-password").value;
+    const selectedUser = getCurrentUser(loginEmail);
+    if (loginPassword === selectedUser.password) {
+        authentificate(loginEmail);
+    } else {
+        alert("Wrong password");
     }
 };
 
@@ -177,24 +177,8 @@ const logOut = () => {
     goToAuthScreen();
 };
 
-
-//check in the login if the user exist and if the password is the user password. if not we create a new user.
-const checkUser = (ev) => {
-    ev.preventDefault();
-    const loginEmail = document.getElementById("login-email").value;
-    const loginPassword = document.getElementById("login-password").value;
-    const selectedUser = getCurrentUser(loginEmail);
-    if (loginPassword === selectedUser.password) {
-        authentificate(loginEmail);
-    } else {
-        alert("Wrong password");
-    }
-};
-
-loginBtnEl.onclick = setLoginTab;
-registerBtnEl.onclick = setRegisterTab;
-submitRegisterBtnEl.onclick = createUser;
-submitLoginBtnEl.onclick = checkUser;
+submitRegisterBtnEl.onclick = register;
+submitLoginBtnEl.onclick = login;
 logOutBtnEl.onclick = logOut;
 createListBtnEl.onclick = createList;
 window.onload = () => {
