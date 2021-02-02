@@ -9,7 +9,6 @@ body {
     background-color: #f3f3f3;
     font-family: 'Raleway', sans-serif;
     color: #616060;
-    padding-top: 80px;
 }
 
 .button-box {
@@ -46,6 +45,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.dashboard-screen {
+    padding-top: 80px;
 }
 
 .header {
@@ -172,7 +175,7 @@ body {
     font-size: 20px;
 }
 
-input {
+.input {
     width: calc(100% - 20px);
     height: 40px;
     border: 1px solid #d0cccc;
@@ -181,16 +184,20 @@ input {
     font-size: 18px;
 }
 
-input:focus {
+.input:focus {
     outline: none;
     border-color: #7169ea;
 }
 
-input::placeholder {
+.input::placeholder {
     font-weight: 300;
     font-size: 16px;
     text-transform: uppercase;
     color: #bdbaba;
+}
+
+label {
+    cursor: pointer;
 }
 
 .btn {
@@ -244,6 +251,7 @@ input::placeholder {
 
 .tab-buttons .tab-btn {
     width: 50%;
+    cursor: pointer;
     background-color: transparent;
     border-radius: 0;
     border: 0;
@@ -255,6 +263,7 @@ input::placeholder {
 .tab-buttons .tab-btn.active {
     color: #fff;
     background-color: #7169ea;
+    cursor: default;
 }
 
 .tab-buttons .tab-btn:first-child {
