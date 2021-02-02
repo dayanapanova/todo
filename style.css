@@ -97,7 +97,7 @@ body {
     color: #fff;
 }
 
-.open-list-form-btn {
+.circle-add-btn {
     bottom: 20px;
     right: 20px;
     width: 50px;
@@ -137,6 +137,12 @@ body {
     justify-content: center;
     opacity: 0;
     visibility: hidden;
+    transition: visibility 0.3s, opacity 0.3s ease-in-out;
+}
+
+.modal.open {
+    opacity:1;
+    visibility: visible;
 }
 
 .modal .modal-content {
@@ -145,6 +151,12 @@ body {
     border-radius: 6px;
     padding: 0;
     box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
+    transform: translateY(-100%);
+    transition: transform 0.5s ease-in-out;
+}
+
+.modal.open .modal-content {
+    transform: translateY(0);
 }
 
 .modal .modal-head {
@@ -173,6 +185,7 @@ body {
     top: 0;
     right: 10px;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .input {

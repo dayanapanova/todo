@@ -13,6 +13,9 @@ const registerFormEl = document.getElementById("register-form");
 const submitRegisterBtnEl = document.getElementById("submit-register-btn");
 const submitLoginBtnEl = document.getElementById("submit-login-btn");
 const dashboardScreenEl = document.getElementById("dashboard-screen");
+const modalEls = document.querySelectorAll(".modal");
+const modalToggleBtnEls = document.querySelectorAll(".modal-toggle-btn");
+const modalCloseBtnEls = document.querySelectorAll(".modal-close-btn");
 const authScreenEl = document.getElementById("auth-screen");
 const logOutBtnEl = document.getElementById("log-out");
 const userInfoEl = document.getElementById("user-info");
@@ -197,7 +200,25 @@ const handleTabClick = (ev) => {
     changeTab(currentTab);
 };
 
-tabBtnEls.forEach(tab => tab.onclick = handleTabClick); 
+const openModal = (ev) => {
+    const currentModalName = ev.target.getAttribute("data-name");
+    modalEls.forEach((modal) =>{
+        const modalName = modal.getAttribute("data-name");
+        if(modalName === currentModalName) {
+            modal.classList.add("open");
+        } else {
+            modal.classList.remove("open");
+        }
+    });
+};
+
+const closeModal = () => {
+    modalEls.forEach((modal) => modal.classList.remove("open"));
+};
+
+modalToggleBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = openModal);
+tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
+modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = closeModal); 
 submitRegisterBtnEl.onclick = register;
 submitLoginBtnEl.onclick = login;
 logOutBtnEl.onclick = logOut;
