@@ -13,22 +13,6 @@ body {
     color: #616060;
 }
 
-.button-box {
-    width: 220px;
-    margin: 35px auto;
-    position: relative;
-    box-shadow: 0 0 20px 9px rgb(247, 186, 186);
-    border-radius: 30px;
-}
-.toggle-btn {
-    padding: 10px 30px;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    outline: none;
-    position: relative;
-}
-
 .input-field {
     width: 100%;
     padding: 10px 0;
@@ -229,6 +213,11 @@ label {
     outline: none;
 }
 
+.btn.small {
+    font-size: 14px;
+    padding: 8px 10px;
+}
+
 .btn:focus
 .btn:hover {
     outline: none;
@@ -312,7 +301,44 @@ label {
     background-color: #fff;
     box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
     border-radius: 6px;
-    padding: 10px;
+    padding: 20px;
+}
+
+.list-items .title {
+    text-transform: uppercase;
+    font-size: 20px;
+    border-bottom: 1px solid #eae7e7;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.task-progress {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.task-progress .progress-label {
+    margin-bottom: 5px;
+}
+
+.task-progress .progress-label span {
+    color:  #38cb89;
+}
+
+.task-progress .progress-label strong {
+    font-weight: 500;
+}
+
+.task-progress .progress-bar {
+    height: 5px;
+    background-color: silver;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.task-progress .progress-bar .indicator {
+    height: 100%;
+    background-color: #38cb89;
 }
 
 

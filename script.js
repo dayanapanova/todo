@@ -165,12 +165,14 @@ const listItem = (id, name) => {
     return (
         `<div class="list-item-column">
             <div class="list-item-content">
-                <h1>${name}</h1>
-                <input type="text"></input>
-                <button id="create-task-btn">Create task</button>
-                <div>
-                    ${currentListTasks.map(({id,name}) => taskItem(id,name))}
+                <h1 class="title">${name}</h1>
+                <div class="task-progress">
+                    <p class="progress-label"><strong>4</strong> of 6 tasks  is <span>done</span></p>
+                    <div class="progress-bar">
+                        <div class="indicator" style="width:50%"></div>
+                    </div>
                 </div>
+                <button class="btn small">View list tasks (12)</button>
             </div>
         </div>`)
 };
