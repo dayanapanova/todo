@@ -45,6 +45,49 @@ const filterCurrentUserLists = (lists) => {
     return lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
 };
 
+const getCurrentUser = (email) => {
+    const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
+    return usersData.filter((user) => user.email === email)[0] ?? {};
+};
+
+//Tab content 
+const changeTab = (currentTab) => {
+    const setActiveClassName = (tabs) => {
+        tabs.forEach((tabItem) => {
+            const tabID = tabItem.getAttribute("data-tab");
+            if(tabID === currentTab) {
+                tabItem.classList.add("active");
+            } else {
+                tabItem.classList.remove("active");
+            }
+        });
+    } 
+    setActiveClassName(allTabsItemsEls);
+    setActiveClassName(tabBtnEls);
+};
+
+const handleTabClick = (ev) => {
+    const currentTab = ev.target.getAttribute("data-tab");
+    changeTab(currentTab);
+};
+
+//Modal function
+const openModal = (ev) => {
+    const currentModalName = ev.target.getAttribute("data-name");
+    modalEls.forEach((modal) =>{
+        const modalName = modal.getAttribute("data-name");
+        if(modalName === currentModalName) {
+            modal.classList.add("open");
+        } else {
+            modal.classList.remove("open");
+        }
+    });
+};
+
+const closeModal = () => {
+    modalEls.forEach((modal) => modal.classList.remove("open"));
+};
+
 // Function to create a user
 const register = (ev) => {
     ev.preventDefault();
@@ -107,13 +150,6 @@ const createTask = (listID) => {
     renderLists();
 };
 
-// TODO : 
-const taskItem = (id,name) => (
-    `<div>
-        <h6>${name}</h6>
-    </div>`
-)
-
 const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
@@ -129,6 +165,12 @@ const listItem = (id, name) => {
     )
 };
 
+// TODO : 
+const taskItem = (id,name) => (
+    `<div>
+        <h6>${name}</h6>
+    </div>`
+);
 
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
@@ -145,26 +187,11 @@ const renderHeader = () => {
 const renderLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     appendLists(localStorageLists);
-}
+};
 
 const renderDashboard = () => {
     renderHeader();
     renderLists();
-};
-
-const changeTab = (currentTab) => {
-    const setActiveClassName = (tabs) => {
-        tabs.forEach((tabItem) => {
-            const tabID = tabItem.getAttribute("data-tab");
-            if(tabID === currentTab) {
-                tabItem.classList.add("active");
-            } else {
-                tabItem.classList.remove("active");
-            }
-        });
-    } 
-    setActiveClassName(allTabsItemsEls);
-    setActiveClassName(tabBtnEls);
 };
 
 const goToDashboard = () => {
@@ -179,11 +206,6 @@ const goToAuthScreen = () => {
     changeTab("login-tab");
 };
 
-const getCurrentUser = (email) => {
-    const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
-    return usersData.filter((user) => user.email === email)[0] ?? {};
-};
-
 const authentificate = (email) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
     goToDashboard();
@@ -193,27 +215,6 @@ const logOut = () => {
     localStorage.removeItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     userInfoEl.innerHTML = "";
     goToAuthScreen();
-};
-
-const handleTabClick = (ev) => {
-    const currentTab = ev.target.getAttribute("data-tab");
-    changeTab(currentTab);
-};
-
-const openModal = (ev) => {
-    const currentModalName = ev.target.getAttribute("data-name");
-    modalEls.forEach((modal) =>{
-        const modalName = modal.getAttribute("data-name");
-        if(modalName === currentModalName) {
-            modal.classList.add("open");
-        } else {
-            modal.classList.remove("open");
-        }
-    });
-};
-
-const closeModal = () => {
-    modalEls.forEach((modal) => modal.classList.remove("open"));
 };
 
 modalToggleBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = openModal);
