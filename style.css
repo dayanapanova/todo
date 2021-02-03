@@ -140,7 +140,7 @@ body {
     transition: visibility 0.3s, opacity 0.3s ease-in-out;
 }
 
-.modal.open {
+.modal.is-open {
     opacity:1;
     visibility: visible;
 }
@@ -155,7 +155,7 @@ body {
     transition: transform 0.5s ease-in-out;
 }
 
-.modal.open .modal-content {
+.modal.is-open .modal-content {
     transform: translateY(0);
 }
 

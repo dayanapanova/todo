@@ -14,7 +14,7 @@ const submitRegisterBtnEl = document.getElementById("submit-register-btn");
 const submitLoginBtnEl = document.getElementById("submit-login-btn");
 const dashboardScreenEl = document.getElementById("dashboard-screen");
 const modalEls = document.querySelectorAll(".modal");
-const modalToggleBtnEls = document.querySelectorAll(".modal-toggle-btn");
+const modalOpenBtnEls = document.querySelectorAll(".modal-open-btn");
 const modalCloseBtnEls = document.querySelectorAll(".modal-close-btn");
 const authScreenEl = document.getElementById("auth-screen");
 const logOutBtnEl = document.getElementById("log-out");
@@ -72,21 +72,29 @@ const handleTabClick = (ev) => {
 };
 
 //Modal function
-const openModal = (ev) => {
-    const currentModalName = ev.target.getAttribute("data-name");
-    modalEls.forEach((modal) =>{
+const toggleModal = (currentModalName, action) => {
+    const addOrRemoveClass = action === "open" ? "add" : "remove";
+    modalEls.forEach((modal) => {
         const modalName = modal.getAttribute("data-name");
         if(modalName === currentModalName) {
-            modal.classList.add("open");
-        } else {
-            modal.classList.remove("open");
-        }
+            modal.classList[addOrRemoveClass]("is-open");
+        };
     });
 };
 
-const closeModal = () => {
-    modalEls.forEach((modal) => modal.classList.remove("open"));
+const openModal = (currentModalName) => toggleModal(currentModalName, "open");
+
+const closeModal = (currentModalName) => toggleModal(currentModalName, "close");
+
+const handleModalOpenClick = (ev) => {
+    const currentModalName = ev.target.getAttribute("data-name");
+    openModal(currentModalName);
 };
+
+const handleModalCloseClick = (ev) => {
+    const currentModalName = ev.target.getAttribute("data-name");
+    closeModal(currentModalName);
+}
 
 // Function to create a user
 const register = (ev) => {
@@ -135,6 +143,7 @@ const createList = () => {
     const listsData = [...localStorageLists, newList];
     setLocalStorage(LOCALSTORAGE_KEYS.LISTS,listsData);
     appendLists(listsData);
+    closeModal("create-list-modal");
 };
 
 // TODO: Handle this function
@@ -217,9 +226,9 @@ const logOut = () => {
     goToAuthScreen();
 };
 
-modalToggleBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = openModal);
 tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
-modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = closeModal); 
+modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
+modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
 submitRegisterBtnEl.onclick = register;
 submitLoginBtnEl.onclick = login;
 logOutBtnEl.onclick = logOut;
