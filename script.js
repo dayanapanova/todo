@@ -163,15 +163,16 @@ const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
     return (
-        `<div>
-            <h1>${name}</h1>
-            <input type="text"></input>
-            <button id="create-task-btn">Create task</button>
-            <div>
-                ${currentListTasks.map(({id,name}) => taskItem(id,name))}
+        `<div class="list-item-column">
+            <div class="list-item-content">
+                <h1>${name}</h1>
+                <input type="text"></input>
+                <button id="create-task-btn">Create task</button>
+                <div>
+                    ${currentListTasks.map(({id,name}) => taskItem(id,name))}
+                </div>
             </div>
-        </div>`
-    )
+        </div>`)
 };
 
 // TODO : 
@@ -184,6 +185,7 @@ const taskItem = (id,name) => (
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
     const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
+    console.log(listsDomData);
     listsEl.innerHTML = listsDomData;
 };
 

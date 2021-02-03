@@ -3,6 +3,8 @@
 * {
     margin: 0;
     padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
@@ -293,6 +295,24 @@ label {
 
 .tab-item.active {
     display: block;
+}
+
+.list-items {
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list-items .list-item-column {
+    width: 25%;
+    padding: 10px;
+}
+
+.list-items .list-item-content {
+    background-color: #fff;
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px 0px;
+    border-radius: 6px;
+    padding: 10px;
 }
 
 
