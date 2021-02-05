@@ -183,6 +183,11 @@ body {
     font-size: 18px;
 }
 
+.input.small {
+    height: 32px;
+    font-size: 15px;
+}
+
 .input:focus {
     outline: none;
     border-color: #7169ea;
@@ -339,6 +344,15 @@ label {
 .task-progress .progress-bar .indicator {
     height: 100%;
     background-color: #38cb89;
+}
+
+.create-task-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.create-task-form .input-wrapper {
+    width: 100%;
 }
 
 
