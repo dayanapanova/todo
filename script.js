@@ -25,6 +25,7 @@ const listNameInputEl = document.getElementById("list-name-input");
 const taskNameInputEl = document.getElementById("create-task-name");
 const listsEl = document.getElementById("lists");
 const tasksListEl = document.getElementById("tasks-list");
+const currentListNameEl = document.getElementById("current-list-name");
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
 let selectedListID = "";
@@ -58,9 +59,15 @@ const getCurrentUser = (email) => {
     return usersData.filter((user) => user.email === email)[0] ?? {};
 };
 
+const getListByID = (id) => {
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+    const selectedList = localStorageLists.filter((list) => list.id === id)[0];
+    return selectedList;
+};
+
 const getTasksByListID = (id) => {
-    const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
-    const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
+    const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
+    const currentListTasks = localStorageTasks.filter((task) => task.listID === id);
     return currentListTasks;
 };
 
@@ -216,6 +223,8 @@ const renderHeader = () => {
 const handleTaskDetailBtnClick = (ev) => {
     const listID = ev.target.getAttribute("data-list-id");
     selectedListID = listID;
+    const {name} = getListByID(listID);
+    currentListNameEl.innerHTML = name;
     openModal("tasks-list-modal");
     renderTasksByListID(listID);
 };
