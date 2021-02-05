@@ -12,6 +12,7 @@ const loginFormEl = document.getElementById("login-form");
 const registerFormEl = document.getElementById("register-form");
 const submitRegisterBtnEl = document.getElementById("submit-register-btn");
 const submitLoginBtnEl = document.getElementById("submit-login-btn");
+const submitTaskBtnEl = document.getElementById("submit-task-btn");
 const dashboardScreenEl = document.getElementById("dashboard-screen");
 const modalEls = document.querySelectorAll(".modal");
 const modalOpenBtnEls = document.querySelectorAll(".modal-open-btn");
@@ -24,6 +25,8 @@ const listNameInputEl = document.getElementById("list-name-input");
 const listsEl = document.getElementById("lists");
 
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
+
+let selectedListID = "";
 
 const generateUUID = () => {
     let d = new Date().getTime();
@@ -150,12 +153,12 @@ const createList = () => {
     closeModal("create-list-modal");
 };
 
-// TODO: Handle this function
-const createTask = (listID) => {
+const createTask = (ev) => {
+    ev.preventDefault();
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const newTask = {
         id: generateUUID(),
-        listID: listID,
+        listID: selectedListID,
         name: 'test',
     };
     const taskData = [...localStorageTasks, newTask];
@@ -176,25 +179,17 @@ const listItem = (id, name) => {
                 <div class="task-progress">
                     <p class="progress-label"><strong>${doneTasks}</strong> of ${totalTasks} tasks  is <span>done</span></p>
                     <div class="progress-bar">
-                        <div class="indicator" style="width:${calculatePercentage(doneTasks, totalTasks)}%"></div>
+                        <div class="indicator" style="width:${doneTasks ? calculatePercentage(doneTasks, totalTasks) : 0}%"></div>
                     </div>
                 </div>
-                <button class="btn small">View list tasks (12)</button>
+                <button data-list-id="${id}" class="btn small task-detail-btn">View list tasks (${totalTasks})</button>
             </div>
         </div>`)
 };
 
-// TODO : 
-const taskItem = (id,name) => (
-    `<div>
-        <h6>${name}</h6>
-    </div>`
-);
-
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
     const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
-    console.log(listsDomData);
     listsEl.innerHTML = listsDomData;
 };
 
@@ -204,9 +199,19 @@ const renderHeader = () => {
     userInfoEl.innerHTML = `${firstname} ${lastname}`;
 };
 
+const handleTaskDetailBtnClick = (ev) => {
+    const listID = ev.target.getAttribute("data-list-id");
+    selectedListID = listID;
+    openModal("tasks-list-modal");
+};
+
 const renderLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     appendLists(localStorageLists);
+    const detailButtons = document.querySelectorAll(".task-detail-btn");
+    detailButtons.forEach((button) =>(
+        button.onclick = handleTaskDetailBtnClick
+    ));
 };
 
 const renderDashboard = () => {
@@ -242,6 +247,7 @@ modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOp
 modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
 submitRegisterBtnEl.onclick = register;
 submitLoginBtnEl.onclick = login;
+submitTaskBtnEl.onclick = createTask;
 logOutBtnEl.onclick = logOut;
 createListBtnEl.onclick = createList;
 window.onload = () => {
@@ -251,5 +257,6 @@ window.onload = () => {
         goToAuthScreen();
     }
 };
+
 
 

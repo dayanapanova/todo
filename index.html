@@ -86,6 +86,20 @@
                     </div>
                 </div>
             </div>
+            <div data-name="tasks-list-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-head">
+                        <h1 class="title">Task for list <span id="current-list-name"></span></h1>
+                        <span data-name="tasks-list-modal" class="modal-close-btn">✕</span>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input id="create-task-name" type="text"/>
+                            <button id="submit-task-btn">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div id="lists" class="list-items"></div>
             <button data-name="create-list-modal" class="modal-open-btn circle-add-btn">+</button>
         </div>
