@@ -35,6 +35,10 @@ const generateUUID = () => {
     return uuid;
 };
 
+const calculatePercentage = (particalValue, totalValue) => {
+    return (particalValue * 100) / totalValue;
+};
+
 // Local storage helpers
 const getLocalStorage = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) ?? defaultValue;
 const setLocalStorage = (key, data) => localStorage.setItem(key,JSON.stringify(data)); 
@@ -162,6 +166,8 @@ const createTask = (listID) => {
 const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
+    const doneTasks = 4;
+    const totalTasks = 6;
     return (
         `<div class="list-item-column">
             <div class="list-item-content">
@@ -169,7 +175,7 @@ const listItem = (id, name) => {
                 <div class="task-progress">
                     <p class="progress-label"><strong>4</strong> of 6 tasks  is <span>done</span></p>
                     <div class="progress-bar">
-                        <div class="indicator" style="width:50%"></div>
+                        <div class="indicator" style="width:${calculatePercentage(doneTasks, totalTasks)}%"></div>
                     </div>
                 </div>
                 <button class="btn small">View list tasks (12)</button>
