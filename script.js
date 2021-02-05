@@ -166,14 +166,15 @@ const createTask = (listID) => {
 const listItem = (id, name) => {
     const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
-    const doneTasks = 4;
-    const totalTasks = 6;
+    const totalTasks = currentListTasks.length;
+    // TODO : calculate the done tasks after the logic about adding tasks
+    const doneTasks = 0;
     return (
         `<div class="list-item-column">
             <div class="list-item-content">
                 <h1 class="title">${name}</h1>
                 <div class="task-progress">
-                    <p class="progress-label"><strong>4</strong> of 6 tasks  is <span>done</span></p>
+                    <p class="progress-label"><strong>${doneTasks}</strong> of ${totalTasks} tasks  is <span>done</span></p>
                     <div class="progress-bar">
                         <div class="indicator" style="width:${calculatePercentage(doneTasks, totalTasks)}%"></div>
                     </div>
