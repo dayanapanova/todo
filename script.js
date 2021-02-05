@@ -22,8 +22,9 @@ const logOutBtnEl = document.getElementById("log-out");
 const userInfoEl = document.getElementById("user-info");
 const createListBtnEl = document.getElementById("create-list-btn");
 const listNameInputEl = document.getElementById("list-name-input");
+const taskNameInputEl = document.getElementById("create-task-name");
 const listsEl = document.getElementById("lists");
-
+const tasksListEl = document.getElementById("tasks-list");
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
 let selectedListID = "";
@@ -55,6 +56,12 @@ const filterCurrentUserLists = (lists) => {
 const getCurrentUser = (email) => {
     const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
     return usersData.filter((user) => user.email === email)[0] ?? {};
+};
+
+const getTasksByListID = (id) => {
+    const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
+    const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
+    return currentListTasks;
 };
 
 //Tab content 
@@ -158,17 +165,18 @@ const createTask = (ev) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const newTask = {
         id: generateUUID(),
+        done: false,
         listID: selectedListID,
-        name: 'test',
+        name: taskNameInputEl.value,
     };
     const taskData = [...localStorageTasks, newTask];
     setLocalStorage(LOCALSTORAGE_KEYS.TASKS,taskData);
     renderLists();
+    renderTasksByListID(selectedListID);
 };
 
 const listItem = (id, name) => {
-    const localStoragetTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
-    const currentListTasks = localStoragetTasks.filter((task) => task.listID === id);
+    const currentListTasks = getTasksByListID(id);
     const totalTasks = currentListTasks.length;
     // TODO : calculate the done tasks after the logic about adding tasks
     const doneTasks = 0;
@@ -187,6 +195,12 @@ const listItem = (id, name) => {
         </div>`)
 };
 
+const taskItem = (name, isDone) => {
+    return (
+        `<div>${name}</div>`
+    )
+}
+
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
     const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
@@ -203,6 +217,7 @@ const handleTaskDetailBtnClick = (ev) => {
     const listID = ev.target.getAttribute("data-list-id");
     selectedListID = listID;
     openModal("tasks-list-modal");
+    renderTasksByListID(listID);
 };
 
 const renderLists = () => {
@@ -212,6 +227,12 @@ const renderLists = () => {
     detailButtons.forEach((button) =>(
         button.onclick = handleTaskDetailBtnClick
     ));
+};
+
+const renderTasksByListID = (id) => {
+    const currentListTasks = getTasksByListID(id);
+    const tasksDomData = currentListTasks.map(({name, done}) => taskItem(name, done));
+    tasksListEl.innerHTML = tasksDomData;   
 };
 
 const renderDashboard = () => {
