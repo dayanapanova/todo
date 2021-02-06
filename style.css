@@ -355,5 +355,20 @@ label {
     width: 100%;
 }
 
+.tasks-list .task-item {
+    width: 100%;
+    display: flex;
+    padding: 6px 0;
+    border-bottom: 1px solid #eae7e7;
+    align-items: center;
+}
+
+.tasks-list .task-item .checkbox {
+    display: block;
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+}
+
 
 

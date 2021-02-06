@@ -218,11 +218,14 @@ const listItem = (id, name) => {
         </div>`)
 };
 
-const taskItem = (name, isDone) => {
+const taskItem = (id, name, isDone) => {
     return (
-        `<div>${name}</div>`
+        `<div class="task-item">
+            <input id="task-${id}" type="checkbox" class="checkbox" ${isDone ? "checked" : ""}>
+            <label for="task-${id}">${name}<label>
+        </div>`
     )
-}
+};
 
 const appendLists = (lists) => {
     const currentUserLists = filterCurrentUserLists(lists);
@@ -256,7 +259,7 @@ const renderLists = () => {
 
 const renderTasksByListID = (id) => {
     const currentListTasks = getTasksByListID(id);
-    const tasksDomData = currentListTasks.map(({name, done}) => taskItem(name, done));
+    const tasksDomData = currentListTasks.map(({name, done, id}) => taskItem(id, name, done));
     tasksListEl.innerHTML = tasksDomData;   
 };
 
@@ -288,12 +291,17 @@ const logOut = () => {
     goToAuthScreen();
 };
 
+const handleLogOutClick = (ev) => {
+    ev.preventDefault();
+    logOut();
+};
+
 tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
 modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
 modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
 submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
 submitLoginBtnEl.onclick = handleLoginFormSubmit;
-logOutBtnEl.onclick = logOut;
+logOutBtnEl.onclick = handleLogOutClick;
 createListBtnEl.onclick = handleCreateListFormSubmit;
 submitTaskBtnEl.onclick = handleCreateTaskFormSubmit;
 window.onload = () => {
