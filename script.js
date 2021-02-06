@@ -117,38 +117,46 @@ const handleModalCloseClick = (ev) => {
     closeModal(currentModalName);
 }
 
-// Function to create a user
-const register = (ev) => {
-    ev.preventDefault();
-    const newUserEmail = document.getElementById('register-email').value;
+const register = (newUserData) => {
     const localStorageCurrentUsers = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
-    const newUser = {
-        firstname: document.getElementById('register-firstName').value,
-        lastname: document.getElementById('register-lastName').value,
-        email: newUserEmail,
-        password: document.getElementById('register-password').value
-    };
     // check if user exist
-    const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserEmail).length
+    const userIsExist = localStorageCurrentUsers.filter((user) => user.email === newUserData.email).length
     if (!userIsExist) {
-        const usersData = [...localStorageCurrentUsers, newUser];
-        setLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA,usersData);
-        authentificate(newUserEmail);
+        const usersData = [...localStorageCurrentUsers, newUserData];
+        setLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, usersData);
+        authentificate(newUserData.email);
     } else {
         alert("User exist!");
     }
 };
 
-const login = (ev) => {
-    ev.preventDefault();
-    const loginEmail = document.getElementById("login-email").value;
-    const loginPassword = document.getElementById("login-password").value;
-    const selectedUser = getCurrentUser(loginEmail);
-    if (loginPassword === selectedUser.password) {
-        authentificate(loginEmail);
+const login = (userData) => {
+    const selectedUser = getCurrentUser(userData.email);
+    if (userData.password === selectedUser.password) {
+        authentificate(userData.email);
     } else {
         alert("Wrong password");
     }
+};
+
+const handleRegisterFormSubmit = (ev) => {
+    ev.preventDefault();
+    const userData = {
+        firstname: document.getElementById('register-firstName').value,
+        lastname: document.getElementById('register-lastName').value,
+        email: document.getElementById('register-email').value,
+        password: document.getElementById('register-password').value
+    };
+    register(userData);
+};
+
+const handleLoginFormSubmit = (ev) => {
+    ev.preventDefault();
+    const userData = {
+        email: document.getElementById("login-email").value,
+        password: document.getElementById("login-password").value,
+    }
+    login(userData);
 };
 
 // Get the current user email and creates a new list 
@@ -275,8 +283,8 @@ const logOut = () => {
 tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
 modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
 modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
-submitRegisterBtnEl.onclick = register;
-submitLoginBtnEl.onclick = login;
+submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
+submitLoginBtnEl.onclick = handleLoginFormSubmit;
 submitTaskBtnEl.onclick = createTask;
 logOutBtnEl.onclick = logOut;
 createListBtnEl.onclick = createList;
