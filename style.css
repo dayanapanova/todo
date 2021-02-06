@@ -370,5 +370,10 @@ label {
     height: 16px;
 }
 
+.tasks-list .task-item .checkbox:checked ~ label {
+    -webkit-text-decoration-line: line-through; 
+    text-decoration-line: line-through;
+}
+
 
 
