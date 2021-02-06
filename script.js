@@ -21,8 +21,6 @@ const authScreenEl = document.getElementById("auth-screen");
 const logOutBtnEl = document.getElementById("log-out");
 const userInfoEl = document.getElementById("user-info");
 const createListBtnEl = document.getElementById("create-list-btn");
-const listNameInputEl = document.getElementById("list-name-input");
-const taskNameInputEl = document.getElementById("create-task-name");
 const listsEl = document.getElementById("lists");
 const tasksListEl = document.getElementById("tasks-list");
 const currentListNameEl = document.getElementById("current-list-name");
@@ -160,9 +158,8 @@ const handleLoginFormSubmit = (ev) => {
 };
 
 // Get the current user email and creates a new list 
-const createList = () => {
+const createList = (listName) => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    const listName = listNameInputEl.value;
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     const newList = {
         id: generateUUID(),
@@ -170,25 +167,36 @@ const createList = () => {
         userEmail: currentUserEmail,
     };
     const listsData = [...localStorageLists, newList];
-    setLocalStorage(LOCALSTORAGE_KEYS.LISTS,listsData);
+    setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
     appendLists(listsData);
     closeModal("create-list-modal");
 };
 
-const createTask = (ev) => {
+const handleCreateListFormSubmit = (ev) => {
     ev.preventDefault();
+    const listName = document.getElementById("list-name-input").value;
+    createList(listName);
+};
+
+const createTask = (taskName) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const newTask = {
         id: generateUUID(),
         done: false,
         listID: selectedListID,
-        name: taskNameInputEl.value,
+        name: taskName,
     };
     const taskData = [...localStorageTasks, newTask];
     setLocalStorage(LOCALSTORAGE_KEYS.TASKS,taskData);
     renderLists();
     renderTasksByListID(selectedListID);
 };
+
+const handleCreateTaskFormSubmit = (ev) => {
+    ev.preventDefault();
+    const taskName = document.getElementById("create-task-name").value;
+    createTask(taskName);
+}
 
 const listItem = (id, name) => {
     const currentListTasks = getTasksByListID(id);
@@ -285,9 +293,9 @@ modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOp
 modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
 submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
 submitLoginBtnEl.onclick = handleLoginFormSubmit;
-submitTaskBtnEl.onclick = createTask;
 logOutBtnEl.onclick = logOut;
-createListBtnEl.onclick = createList;
+createListBtnEl.onclick = handleCreateListFormSubmit;
+submitTaskBtnEl.onclick = handleCreateTaskFormSubmit;
 window.onload = () => {
     if (isAuthentificated) {
         goToDashboard();
