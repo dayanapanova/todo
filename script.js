@@ -113,6 +113,12 @@ const getTasksByListID = (id) => {
     return currentListTasks;
 };
 
+const getCurrentUserLists = () => {
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+    const currentUserLists = filterCurrentUserLists(localStorageLists);
+    return currentUserLists;
+};
+
 //Tab content 
 const changeTab = (currentTab) => {
     const setActiveClassName = (tabs) => {
@@ -250,8 +256,8 @@ const handleLoginFormSubmit = (ev) => {
 };
 
 const checkListNameExist = (listName) => {
-    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    const nameIsExist = localStorageLists.filter((list) => list.name.toLowerCase() === listName.toLowerCase()).length
+    const currentUserLists = getCurrentUserLists();
+    const nameIsExist = currentUserLists.filter((list) => list.name.toLowerCase() === listName.toLowerCase()).length
     return nameIsExist;
 };
 
@@ -421,8 +427,7 @@ const handleOpenListUpdateForm = (ev) => {
 };
 
 const renderLists = () => {
-    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    const currentUserLists = filterCurrentUserLists(localStorageLists);
+    const currentUserLists = getCurrentUserLists();
     const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
     listsEl.innerHTML = listsDomData;
     const detailButtons = document.querySelectorAll(".task-detail-btn");
