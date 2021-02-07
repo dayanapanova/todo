@@ -21,6 +21,7 @@ const authScreenEl = document.getElementById("auth-screen");
 const logOutBtnEl = document.getElementById("log-out");
 const userInfoEl = document.getElementById("user-info");
 const createListBtnEl = document.getElementById("create-list-btn");
+const updateListBtn = document.getElementById("edit-list-btn");
 const listsEl = document.getElementById("lists");
 const tasksListEl = document.getElementById("tasks-list");
 const currentListNameEl = document.getElementById("current-list-name");
@@ -263,6 +264,21 @@ const createList = (listName) => {
     closeModal("create-list-form-modal");
 };
 
+const updateList = (listID, listName) => {
+    const localStorageListItems = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+    const filteredListItems = localStorageListItems.filter((list)=> list.id !== listID);
+    const selectedListItem = getListByID(listID);
+    console.log(selectedListItem);
+    const updatedListItem = {
+        ...selectedListItem,
+        name: listName,
+    }
+    const listsData = [...filteredListItems, updatedListItem];
+    setLocalStorage(listsData);
+    renderLists();
+    closeModal("edit-list-form-modal");
+};
+
 const handleCreateListFormSubmit = (ev) => {
     ev.preventDefault();
     const listForm = document.forms["create-list-form"];
@@ -279,6 +295,23 @@ const handleCreateListFormSubmit = (ev) => {
         createList(listName);
     }
 };
+
+const handleUpdateListFormSubmit = (ev) => {
+    ev.preventDefault();
+    const listForm = document.forms["edit-list-form"];
+    const validations = [
+        {
+            fieldType: "input",
+            field: "edit-list-name-input",
+            message: "Enter list name",
+        }
+    ];
+    const { isValid } = validate(listForm, validations);
+    if(isValid) {
+        const listName = listForm["edit-list-name-input"].value;
+        updateList(selectedListID, listName);
+    };
+}
 
 const createTask = (taskName) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
@@ -363,17 +396,18 @@ const handleTaskDetailBtnClick = (ev) => {
     renderTasksByListID(listID);
 };
 
-const fillUpdateListForm = (listID) => {
+const fillUpdateListForm = () => {
     const editListForm = document.forms["edit-list-form"];
-    const selectedListItem = getListByID(listID);
+    const selectedListItem = getListByID(selectedListID);
     editListForm["edit-list-name-input"].value = selectedListItem.name;
 };
 
 const handleOpenListUpdateForm = (ev) => {
     ev.preventDefault();
     const listID = ev.currentTarget.getAttribute("data-list-id");
+    selectedListID = listID;
     openModal("edit-list-form-modal");
-    fillUpdateListForm(listID);
+    fillUpdateListForm();
 };
 
 const renderLists = () => {
@@ -462,6 +496,7 @@ submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
 submitLoginBtnEl.onclick = handleLoginFormSubmit;
 logOutBtnEl.onclick = handleLogOutClick;
 createListBtnEl.onclick = handleCreateListFormSubmit;
+updateListBtn.onclick = handleUpdateListFormSubmit;
 submitTaskBtnEl.onclick = handleCreateTaskFormSubmit;
 window.onload = () => {
     if (isAuthentificated) {
