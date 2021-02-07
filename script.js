@@ -260,7 +260,7 @@ const createList = (listName) => {
     };
     const listsData = [...localStorageLists, newList];
     setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
-    appendLists(listsData);
+    renderLists();
     closeModal("create-list-form-modal");
 };
 
@@ -274,7 +274,7 @@ const updateList = (listID, listName) => {
         name: listName,
     }
     const listsData = [...filteredListItems, updatedListItem];
-    setLocalStorage(listsData);
+    setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
     renderLists();
     closeModal("edit-list-form-modal");
 };
@@ -375,12 +375,6 @@ const taskItem = (id, name, isDone) => {
     )
 };
 
-const appendLists = (lists) => {
-    const currentUserLists = filterCurrentUserLists(lists);
-    const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
-    listsEl.innerHTML = listsDomData;
-};
-
 const renderHeader = () => {
     const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
     const { firstname, lastname } = getCurrentUser(currentUserEmail);
@@ -412,7 +406,9 @@ const handleOpenListUpdateForm = (ev) => {
 
 const renderLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    appendLists(localStorageLists);
+    const currentUserLists = filterCurrentUserLists(localStorageLists);
+    const listsDomData = currentUserLists.map(({ id, name }) => listItem(id, name));
+    listsEl.innerHTML = listsDomData;
     const detailButtons = document.querySelectorAll(".task-detail-btn");
     const editListsButtons = document.querySelectorAll(".btn-list-edit");
     detailButtons.forEach((button) =>(
