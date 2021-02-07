@@ -329,7 +329,7 @@ const listItem = (id, name) => {
 const taskItem = (id, name, isDone) => {
     return (
         `<div class="task-item">
-            <input id="task-${id}" type="checkbox" class="checkbox" ${isDone ? "checked" : ""}>
+            <input id="task-${id}" type="checkbox" class="checkbox task-checkbox" ${isDone ? "checked" : ""}>
             <label for="task-${id}">${name}<label>
         </div>`
     )
