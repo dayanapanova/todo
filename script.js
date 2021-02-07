@@ -205,7 +205,6 @@ const handleRegisterFormSubmit = (ev) => {
         }
     ]
     const { isValid } = validate(registerForm, validations);
-    console.log(registerForm["register-agree"].checked);
 
     if(isValid) {
         register({
@@ -301,7 +300,7 @@ const handleCreateTaskFormSubmit = (ev) => {
     ];
     const { isValid } = validate(taskForm, validations);
     if(isValid) {
-        const taskName = taskForm["create-task-name"].value;
+        const taskName = taskForm["create-task-field"].value;
         createTask(taskName);
     };
 };
