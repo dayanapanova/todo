@@ -260,7 +260,7 @@ const createList = (listName) => {
     const listsData = [...localStorageLists, newList];
     setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
     appendLists(listsData);
-    closeModal("create-list-modal");
+    closeModal("create-list-form-modal");
 };
 
 const handleCreateListFormSubmit = (ev) => {
@@ -269,13 +269,13 @@ const handleCreateListFormSubmit = (ev) => {
     const validations = [
         {
             fieldType: "input",
-            field: "list-name-input",
+            field: "create-list-name-input",
             message: "Enter list name",
         }
     ];
     const { isValid } = validate(listForm, validations);
     if(isValid) {
-        const listName = listForm["list-name-input"].value;
+        const listName = listForm["create-list-name-input"].value;
         createList(listName);
     }
 };
@@ -318,7 +318,10 @@ const listItem = (id, name) => {
     return (
         `<div class="list-item-column">
             <div class="list-item-content">
-                <h1 class="title">${name}</h1>
+                <div class="list-item-head">
+                    <h1 class="title">${name}</h1>
+                    <button data-list-id="${id}" class="btn btn-list-edit extra-small">Edit</button>
+                </div>
                 <div class="task-progress">
                     <p class="progress-label"><strong>${doneTasks}</strong> of ${totalTasks} tasks  is <span>done</span></p>
                     <div class="progress-bar">
@@ -360,12 +363,30 @@ const handleTaskDetailBtnClick = (ev) => {
     renderTasksByListID(listID);
 };
 
+const fillUpdateListForm = (listID) => {
+    const editListForm = document.forms["edit-list-form"];
+    const selectedListItem = getListByID(listID);
+    editListForm["edit-list-name-input"].value = selectedListItem.name;
+};
+
+const handleOpenListUpdateForm = (ev) => {
+    ev.preventDefault();
+    const listID = ev.currentTarget.getAttribute("data-list-id");
+    openModal("edit-list-form-modal");
+    fillUpdateListForm(listID);
+};
+
 const renderLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     appendLists(localStorageLists);
     const detailButtons = document.querySelectorAll(".task-detail-btn");
+    const editListsButtons = document.querySelectorAll(".btn-list-edit");
     detailButtons.forEach((button) =>(
         button.onclick = handleTaskDetailBtnClick
+    ));
+
+    editListsButtons.forEach((button) =>(
+        button.onclick = handleOpenListUpdateForm
     ));
 };
 

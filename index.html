@@ -68,19 +68,37 @@
                     <button id="log-out" class="log-out">Log out</button>
                 </div>
             </div>
-            <div data-name="create-list-modal" class="modal">
+            <div data-name="create-list-form-modal" class="modal">
                 <div class="modal-content">
                     <div class="modal-head">
                         <h1 class="title">Create a new list</h1>
-                        <span data-name="create-list-modal" class="modal-close-btn">✕</span>
+                        <span data-name="create-list-form-modal" class="modal-close-btn">✕</span>
                     </div>
                     <div class="modal-body">
                         <form id="create-list-form" class="list-form form">
                             <div class="form-field">
-                                <input class="input" id="list-name-input" placeholder="Enter list name" type="text"/>
+                                <input class="input" id="create-list-name-input" placeholder="Enter list name" type="text"/>
                             </div>
                             <div class="form-btn">
                                 <button id="create-list-btn" class="btn">Create a new todo list</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div data-name="edit-list-form-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-head">
+                        <h1 class="title">Edit list</h1>
+                        <span data-name="edit-list-form-modal" class="modal-close-btn">✕</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-list-form" class="list-form form">
+                            <div class="form-field">
+                                <input class="input" id="edit-list-name-input" placeholder="Enter list name" type="text"/>
+                            </div>
+                            <div class="form-btn">
+                                <button id="edit-list-btn" class="btn">Edit</button>
                             </div>
                         </form>
                     </div>
@@ -108,7 +126,7 @@
                 </div>
             </div>
             <div id="lists" class="list-items"></div>
-            <button data-name="create-list-modal" class="modal-open-btn circle-add-btn">+</button>
+            <button data-name="create-list-form-modal" class="modal-open-btn circle-add-btn">+</button>
         </div>
     </div>
     <script src="script.js"></script>
