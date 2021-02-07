@@ -177,7 +177,7 @@ body {
     font-size: 15px;
 }
 
-.form-field .error-message {
+.error-message {
     color: #e80000;
     display: block;
     margin-top: 5px;

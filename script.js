@@ -291,9 +291,20 @@ const createTask = (taskName) => {
 
 const handleCreateTaskFormSubmit = (ev) => {
     ev.preventDefault();
-    const taskName = document.getElementById("create-task-name").value;
-    createTask(taskName);
-}
+    const taskForm = document.forms["create-task-form"];
+    const validations = [
+        {
+            fieldType: "input",
+            field: "task-name-field",
+            message: "Enter task",
+        }
+    ];
+    const { isValid } = validate(taskForm, validations);
+    if(isValid) {
+        const taskName = taskForm["create-task-name"].value;
+        createTask(taskName);
+    };
+};
 
 const listItem = (id, name) => {
     const currentListTasks = getTasksByListID(id);
