@@ -100,6 +100,12 @@ const getListByID = (id) => {
     return selectedList;
 };
 
+const getTaskByID = (id) => {
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
+    const selectedTask = localStorageLists.filter((list) => list.id === id)[0];
+    return selectedTask;
+};
+
 const getTasksByListID = (id) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStorageTasks.filter((task) => task.listID === id);
@@ -278,7 +284,7 @@ const createTask = (taskName) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const newTask = {
         id: generateUUID(),
-        done: false,
+        isDone: false,
         listID: selectedListID,
         name: taskName,
     };
@@ -300,7 +306,7 @@ const handleCreateTaskFormSubmit = (ev) => {
     ];
     const { isValid } = validate(taskForm, validations);
     if(isValid) {
-        const taskName = taskForm["create-task-field"].value;
+        const taskName = taskForm["task-name-field"].value;
         createTask(taskName);
     };
 };
@@ -308,8 +314,7 @@ const handleCreateTaskFormSubmit = (ev) => {
 const listItem = (id, name) => {
     const currentListTasks = getTasksByListID(id);
     const totalTasks = currentListTasks.length;
-    // TODO : calculate the done tasks after the logic about adding tasks
-    const doneTasks = 0;
+    const doneTasks = currentListTasks.filter(({ isDone })=> isDone === true).length;
     return (
         `<div class="list-item-column">
             <div class="list-item-content">
@@ -328,7 +333,7 @@ const listItem = (id, name) => {
 const taskItem = (id, name, isDone) => {
     return (
         `<div class="task-item">
-            <input id="task-${id}" type="checkbox" class="checkbox task-checkbox" ${isDone ? "checked" : ""}>
+            <input id="task-${id}" data-task-id="${id}" type="checkbox" class="checkbox task-checkbox" ${isDone ? "checked" : ""}>
             <label for="task-${id}">${name}<label>
         </div>`
     )
@@ -364,11 +369,37 @@ const renderLists = () => {
     ));
 };
 
+const changeTaskStatus = (taskID, isDone)=> {
+    const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
+    const selectedTask = getTaskByID(taskID);
+    const filteredTastks = localStorageTasks.filter((task)=> task.id !== taskID);
+    const updatedTask = {
+        id: selectedTask.id,
+        listID: selectedTask.listID,
+        name: selectedTask.name,
+        isDone,
+    };
+    setLocalStorage(LOCALSTORAGE_KEYS.TASKS, [...filteredTastks, updatedTask]);
+    renderLists();
+};
+
+const handleTaskCheck = (ev) => {
+    const currentTarget = ev.currentTarget;
+    const taskID = currentTarget.getAttribute("data-task-id");
+    const isDone = currentTarget.checked
+    changeTaskStatus(taskID, isDone);
+}
+
 const renderTasksByListID = (id) => {
     const currentListTasks = getTasksByListID(id);
-    const tasksDomData = currentListTasks.map(({name, done, id}) => taskItem(id, name, done));
-    tasksListEl.innerHTML = tasksDomData;   
+    const tasksDomData = currentListTasks.map(({name, isDone, id}) => taskItem(id, name, isDone));
+    tasksListEl.innerHTML = tasksDomData;  
+    const taskCheckboxes = document.querySelectorAll(".task-checkbox");
+    taskCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', handleTaskCheck)
+    }); 
 };
+
 
 const renderDashboard = () => {
     renderHeader();
