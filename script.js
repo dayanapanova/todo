@@ -260,8 +260,19 @@ const createList = (listName) => {
 
 const handleCreateListFormSubmit = (ev) => {
     ev.preventDefault();
-    const listName = document.getElementById("list-name-input").value;
-    createList(listName);
+    const listForm = document.forms["create-list-form"];
+    const validations = [
+        {
+            fieldType: "input",
+            field: "list-name-input",
+            message: "Enter list name",
+        }
+    ];
+    const { isValid } = validate(listForm, validations);
+    if(isValid) {
+        const listName = listForm["list-name-input"].value;
+        createList(listName);
+    }
 };
 
 const createTask = (taskName) => {

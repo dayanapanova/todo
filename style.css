@@ -284,17 +284,18 @@ label {
 .tab-buttons .tab-btn {
     width: 50%;
     cursor: pointer;
-    background-color: transparent;
+    background-color: #7169ea;
     border-radius: 0;
     border: 0;
     outline: none;
     padding: 15px 20px;
     text-transform: uppercase;
+    color: #fff;
 }
 
 .tab-buttons .tab-btn.active {
-    color: #fff;
-    background-color: #7169ea;
+    color: #616060;
+    background-color: transparent;
     cursor: default;
 }
 
