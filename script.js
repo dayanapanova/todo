@@ -42,6 +42,43 @@ const calculatePercentage = (particalValue, totalValue) => {
     return (particalValue * 100) / totalValue;
 };
 
+const validate = (form, validations) => {
+    const errors = [];
+    validations.map(({ field, message, fieldType })=> {
+        const formField = form[field];
+        const errorID = `error-${field}-field`;
+        const errorContainer = document.getElementById(errorID);
+        if(errorContainer) {
+            errorContainer.remove();
+        }
+        const mapFieldTypeValues = {
+            input: "value", 
+            checkbox: "checked",
+        }
+        formField.classList.remove('has-error');
+        const fieldIsInvalid = !formField[mapFieldTypeValues[fieldType]];
+        if(fieldIsInvalid) {
+            errors.push({
+                field,
+                message,
+            })
+            formField.classList.add('has-error');
+            const errorEl = document.createElement('span');
+            errorEl.setAttribute('id', errorID);
+            errorEl.setAttribute('class', 'error-message');
+            errorEl.innerHTML = message;
+            formField.after(errorEl);
+        }
+    });
+
+    const isValid = !errors.length;
+
+    return {
+        isValid,
+        errors,
+    };
+};
+
 // Local storage helpers
 const getLocalStorage = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) ?? defaultValue;
 const setLocalStorage = (key, data) => localStorage.setItem(key,JSON.stringify(data)); 
@@ -139,22 +176,71 @@ const login = (userData) => {
 
 const handleRegisterFormSubmit = (ev) => {
     ev.preventDefault();
-    const userData = {
-        firstname: document.getElementById('register-firstName').value,
-        lastname: document.getElementById('register-lastName').value,
-        email: document.getElementById('register-email').value,
-        password: document.getElementById('register-password').value
-    };
-    register(userData);
+    const registerForm = document.forms["register-form"];
+    const validations = [
+        {
+            fieldType: "input",
+            field: "register-firstName",
+            message: "Enter first name",
+        },
+        {
+            fieldType: "input",
+            field: "register-lastName",
+            message: "Enter last name",
+        },
+        {
+            fieldType: "input",
+            field: "register-email",
+            message: "Enter email",
+        },
+        {
+            fieldType: "input",
+            field: "register-password",
+            message: "Enter password"
+        },
+        {
+            fieldType: "checkbox",
+            field: "register-agree",
+            message: "Please accept terms of use"
+        }
+    ]
+    const { isValid } = validate(registerForm, validations);
+    console.log(registerForm["register-agree"].checked);
+
+    if(isValid) {
+        register({
+            firstname: registerForm['register-firstName'].value,
+            lastname: registerForm['register-lastName'].value,
+            email: registerForm['register-email'].value,
+            password: registerForm['register-password'].value
+        });
+    }
 };
 
 const handleLoginFormSubmit = (ev) => {
     ev.preventDefault();
-    const userData = {
-        email: document.getElementById("login-email").value,
-        password: document.getElementById("login-password").value,
+    const loginForm = document.forms["login-form"];
+    const validations = [
+        {
+            fieldType: 'input',
+            field: 'login-email',
+            message: 'Enter email'
+        },
+        {
+            fieldType: 'input',
+            field: 'login-password',
+            message: 'Enter password'
+        }
+    ];
+
+    const { isValid } = validate(loginForm, validations);
+
+    if(isValid) {
+        login({
+            email: loginForm["login-email"].value,
+            password: loginForm["login-password"].value,
+        });
     }
-    login(userData);
 };
 
 // Get the current user email and creates a new list 

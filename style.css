@@ -13,17 +13,6 @@ body {
     color: #616060;
 }
 
-.input-field {
-    width: 100%;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-left: 0;
-    border-top: 0;
-    border-right: 0;
-    border-bottom: 1px solid #999;
-    outline: none;
-}
-
 .auth-screen {
     background-size: cover;
     background-position: center;
@@ -186,6 +175,40 @@ body {
 .input.small {
     height: 32px;
     font-size: 15px;
+}
+
+.form-field .error-message {
+    color: #e80000;
+    display: block;
+    margin-top: 5px;
+    padding: 0 6px;
+    font-size: 14px;
+}
+
+.input.has-error {
+    border-color: #e80000;
+}
+
+.checkbox {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.checkbox .error-message {
+    order: 3;
+    flex-basis: 100%;
+    padding-left: 22px;
+}
+
+.checkbox .label-text {
+    order: 2;
+}
+.checkbox input {
+    margin-right: 6px;
+    width: 16px;
+    height: 16px;
+    display: block;
 }
 
 .input:focus {
