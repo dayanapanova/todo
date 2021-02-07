@@ -369,7 +369,7 @@ const renderLists = () => {
     ));
 };
 
-const changeTaskStatus = (taskID, isDone)=> {
+const updateTaskStatus = (taskID, isDone)=> {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const selectedTask = getTaskByID(taskID);
     const filteredTastks = localStorageTasks.filter((task)=> task.id !== taskID);
@@ -387,7 +387,7 @@ const handleTaskCheck = (ev) => {
     const currentTarget = ev.currentTarget;
     const taskID = currentTarget.getAttribute("data-task-id");
     const isDone = currentTarget.checked
-    changeTaskStatus(taskID, isDone);
+    updateTaskStatus(taskID, isDone);
 }
 
 const renderTasksByListID = (id) => {
