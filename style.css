@@ -384,6 +384,7 @@ label {
 .create-task-form {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .create-task-form .input-wrapper {

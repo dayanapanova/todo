@@ -249,34 +249,50 @@ const handleLoginFormSubmit = (ev) => {
     }
 };
 
+const checkListNameExist = (listName) => {
+    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+    const nameIsExist = localStorageLists.filter((list) => list.name.toLowerCase() === listName.toLowerCase()).length
+    return nameIsExist;
+};
+
 // Get the current user email and creates a new list 
 const createList = (listName) => {
-    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    const newList = {
-        id: generateUUID(),
-        name: listName,
-        userEmail: currentUserEmail,
-    };
-    const listsData = [...localStorageLists, newList];
-    setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
-    renderLists();
-    closeModal("create-list-form-modal");
+    const listNameIsExist = checkListNameExist(listName);
+    if(!listNameIsExist) {
+        const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+        const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+        const newList = {
+            id: generateUUID(),
+            name: listName,
+            userEmail: currentUserEmail,
+        };
+        const listsData = [...localStorageLists, newList];
+        setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
+        renderLists();
+        closeModal("create-list-form-modal");
+    } else {
+        alert("This list name already exist!");
+    }
 };
 
 const updateList = (listID, listName) => {
-    const localStorageListItems = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    const filteredListItems = localStorageListItems.filter((list)=> list.id !== listID);
-    const selectedListItem = getListByID(listID);
-    console.log(selectedListItem);
-    const updatedListItem = {
-        ...selectedListItem,
-        name: listName,
+    const listNameIsExist = checkListNameExist(listName);
+    if(!listNameIsExist) {
+        const localStorageListItems = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
+        const filteredListItems = localStorageListItems.filter((list)=> list.id !== listID);
+        const selectedListItem = getListByID(listID);
+        console.log(selectedListItem);
+        const updatedListItem = {
+            ...selectedListItem,
+            name: listName,
+        }
+        const listsData = [...filteredListItems, updatedListItem];
+        setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
+        renderLists();
+        closeModal("edit-list-form-modal");
+    } else {
+        alert("This list name already exist!")
     }
-    const listsData = [...filteredListItems, updatedListItem];
-    setLocalStorage(LOCALSTORAGE_KEYS.LISTS, listsData);
-    renderLists();
-    closeModal("edit-list-form-modal");
 };
 
 const handleCreateListFormSubmit = (ev) => {
