@@ -25,7 +25,6 @@ const updateListBtn = document.getElementById("edit-list-btn");
 const listsEl = document.getElementById("lists");
 const tasksListEl = document.getElementById("tasks-list");
 const currentListNameEl = document.getElementById("current-list-name");
-const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
 let selectedListID = "";
 
@@ -117,27 +116,6 @@ const getCurrentUserLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     const currentUserLists = filterCurrentUserLists(localStorageLists);
     return currentUserLists;
-};
-
-//Tab content 
-const changeTab = (currentTab) => {
-    const setActiveClassName = (tabs) => {
-        tabs.forEach((tabItem) => {
-            const tabID = tabItem.getAttribute("data-tab");
-            if(tabID === currentTab) {
-                tabItem.classList.add("active");
-            } else {
-                tabItem.classList.remove("active");
-            }
-        });
-    } 
-    setActiveClassName(allTabsItemsEls);
-    setActiveClassName(tabBtnEls);
-};
-
-const handleTabClick = (ev) => {
-    const currentTab = ev.target.getAttribute("data-tab");
-    changeTab(currentTab);
 };
 
 //Modal function
@@ -506,22 +484,210 @@ const handleLogOutClick = (ev) => {
     logOut();
 };
 
-tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
-modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
-modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
-submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
-submitLoginBtnEl.onclick = handleLoginFormSubmit;
-logOutBtnEl.onclick = handleLogOutClick;
-createListBtnEl.onclick = handleCreateListFormSubmit;
-updateListBtn.onclick = handleUpdateListFormSubmit;
-submitTaskBtnEl.onclick = handleCreateTaskFormSubmit;
-window.onload = () => {
-    if (isAuthentificated) {
-        goToDashboard();
-    } else {
-        goToAuthScreen();
-    }
+// tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
+// modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
+// modalCloseBtnEls.forEach(modalCloseBtn => modalCloseBtn.onclick = handleModalCloseClick); 
+// submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
+// submitLoginBtnEl.onclick = handleLoginFormSubmit;
+// logOutBtnEl.onclick = handleLogOutClick;
+// createListBtnEl.onclick = handleCreateListFormSubmit;
+// updateListBtn.onclick = handleUpdateListFormSubmit;
+// submitTaskBtnEl.onclick = handleCreateTaskFormSubmit;
+
+const renderTabs = (tabs) => {
+    const tabTemplate = `
+        <div class="card">
+            <div class="tab-buttons">
+                ${tabs.map(({id, label})=> (`
+                    <button data-tab="${id}" type="button" class="tab-btn">${label}</button>
+                `))}
+            </div>
+            <div class="card-content">
+                <div class="tab-content">
+                    ${tabs.map(({id, content})=> (`
+                        <div data-tab="${id}" class="tab-item">${content()}</div>
+                    `))}
+                </div>
+            </div>
+        </div>
+    `;
+    const tabBtnEls = document.querySelectorAll(".tab-btn");
+    const allTabsItemsEls = document.querySelectorAll(".tab-item");
+    const changeTab = (currentTab) => {
+        const setActiveClassName = (tabs) => {
+            tabs.forEach((tabItem) => {
+                const tabID = tabItem.getAttribute("data-tab");
+                if(tabID === currentTab) {
+                    tabItem.classList.add("active");
+                } else {
+                    tabItem.classList.remove("active");
+                }
+            });
+        } 
+        setActiveClassName(allTabsItemsEls);
+        setActiveClassName(tabBtnEls);
+    };
+    
+    const handleTabClick = (ev) => {
+        const currentTab = ev.target.getAttribute("data-tab");
+        changeTab(currentTab);
+    };
+    tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
+    
+    return tabTemplate;
 };
+
+const renderAuthScreen = () => {
+    const tabs = [
+        {
+            id: 'tab1',
+            label: 'tab1',
+            content: () => `<div>Tab 1</div>`
+        },
+        {
+            id: 'tab2',
+            label: 'tab2',
+            content: () => `<div>Tab 2</div>`
+        },
+    ]
+    return(`
+    <div id="auth-screen">
+        <div class="auth-screen">
+            ${renderTabs(tabs)}
+            <div class="card">
+                <div class="tab-buttons">
+                    <button data-tab="login-tab" type="button" class="tab-btn">Login</button>
+                    <button data-tab="register-tab" type="button" class="tab-btn">Register</button>
+                </div>
+                <div class="card-content">
+                    <div class="tab-content">
+                        <div data-tab="login-tab" class="tab-item">
+                            <form id="login-form" class="form">
+                                <div class="form-field">
+                                    <input class="input" id="login-email" type="email" placeholder="EMAIL">
+                                </div>
+                                <div class="form-field">
+                                    <input class="input" id="login-password" type="password" placeholder="ENTER PASSWORD">
+                                </div>
+                                <div class="form-btn">
+                                    <button id="submit-login-btn"type="submit" class="btn">Log in</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div data-tab="register-tab" class="tab-item">
+                            <form id="register-form" class="form">
+                                <div class="form-field">
+                                    <input class="input" id="register-firstName" type="text" placeholder="First name">
+                                </div>
+                                <div class="form-field">
+                                    <input class="input" id="register-lastName" type="text" placeholder="Last name">
+                                </div>
+                                <div class="form-field">
+                                    <input class="input" id="register-email"type="email" placeholder="EMAIL">
+                                </div>
+                                <div class="form-field">
+                                    <input class="input" id="register-password"type="password" placeholder="ENTER PASSWORD">
+                                </div>
+                                <div class="form-field">
+                                    <label for="agree" class="checkbox">
+                                        <input id="register-agree" type="checkbox"/>
+                                        <span class="label-text">I agree with the terms of use</span>
+                                    </label>
+                                </div>
+                                <div class="form-btn">
+                                    <button id="submit-register-btn" type="submit" class="btn">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `)
+};
+
+const renderDashboardScreen = () => {
+    return(`
+        <div id="dashboard-screen">
+            <div class="dashboard-screen">
+                <div class="header">
+                    <a class="logo">TODO LIST</a>
+                    <div class="user-info">
+                        <div id="user-info" class="user-name"></div>
+                        <button id="log-out" class="log-out">Log out</button>
+                    </div>
+                </div>
+                <div data-name="create-list-form-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-head">
+                            <h1 class="title">Create a new list</h1>
+                            <span data-name="create-list-form-modal" class="modal-close-btn">✕</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-list-form" class="list-form form">
+                                <div class="form-field">
+                                    <input class="input" id="create-list-name-input" placeholder="Enter list name" type="text"/>
+                                </div>
+                                <div class="form-btn">
+                                    <button id="create-list-btn" class="btn">Create a new todo list</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div data-name="edit-list-form-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-head">
+                            <h1 class="title">Edit list</h1>
+                            <span data-name="edit-list-form-modal" class="modal-close-btn">✕</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="edit-list-form" class="list-form form">
+                                <div class="form-field">
+                                    <input class="input" id="edit-list-name-input" placeholder="Enter list name" type="text"/>
+                                </div>
+                                <div class="form-btn">
+                                    <button id="edit-list-btn" class="btn">Edit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div data-name="tasks-list-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-head">
+                            <h1 class="title" id="current-list-name"></h1>
+                            <span data-name="tasks-list-modal" class="modal-close-btn">✕</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-task-form" class="create-task-form">
+                                <div class="input-wrapper">
+                                    <input id="task-name-field" placeholder="Create a new task" class="input small" type="text"/>
+                                </div>
+                                <div>
+                                    <button id="submit-task-btn" class="btn small">Create</button>
+                                </div>
+                            </form>
+                            <div id="tasks-list" class="tasks-list">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="lists" class="list-items"></div>
+                <button data-name="create-list-form-modal" class="modal-open-btn circle-add-btn">+</button>
+            </div>
+        </div>
+    `)
+};
+
+const renderApp = (appEl) => {
+    const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
+    appEl.innerHTML = isAuthentificated ? renderDashboardScreen() : renderAuthScreen();
+};
+
+renderApp(document.getElementById("app"));
 
 
 
