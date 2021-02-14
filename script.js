@@ -3,7 +3,7 @@ const LOCALSTORAGE_KEYS = {
     CURRENT_USER: 'currentUser',
     LISTS: 'lists',
     TASKS: 'tasks'
-}
+};
 
 const appEl = document.getElementById('app');
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
@@ -101,37 +101,6 @@ const getCurrentUserLists = () => {
 const authentificate = (email) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
     renderDashboard();
-};
-
-const listItemTemplate = (id, name) => {
-    const currentListTasks = getTasksByListID(id);
-    const totalTasks = currentListTasks.length;
-    const doneTasks = currentListTasks.filter(({ isDone })=> isDone === true).length;
-    return (
-        `<div class="list-item-column">
-            <div class="list-item-content">
-                <div class="list-item-head">
-                    <h1 class="title">${name}</h1>
-                    <button data-list-id="${id}" class="btn btn-list-edit extra-small">Edit</button>
-                </div>
-                <div class="task-progress">
-                    <p class="progress-label"><strong>${doneTasks}</strong> of ${totalTasks} tasks  is <span>done</span></p>
-                    <div class="progress-bar">
-                        <div class="indicator" style="width:${doneTasks ? calculatePercentage(doneTasks, totalTasks) : 0}%"></div>
-                    </div>
-                </div>
-                <button data-list-id="${id}" class="btn small task-detail-btn">View list tasks (${totalTasks})</button>
-            </div>
-        </div>`)
-};
-
-const taskItemTemplate = (id, name, isDone) => {
-    return (
-        `<div class="task-item">
-            <input id="task-${id}" data-task-id="${id}" type="checkbox" class="checkbox task-checkbox" ${isDone ? "checked" : ""}>
-            <label for="task-${id}">${name}<label>
-        </div>`
-    )
 };
 
 const dashboardTemplate = () => {
@@ -287,10 +256,32 @@ const renderDashboard = () => {
         });
     };
 
-    const renderHeader = (userInfoEl) => {
+    const renderHeader = () => {
         const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
         const { firstname, lastname } = getCurrentUser(currentUserEmail);
         userInfoEl.innerHTML = `${firstname} ${lastname}`;
+    };
+
+    const listItemTemplate = (id, name) => {
+        const currentListTasks = getTasksByListID(id);
+        const totalTasks = currentListTasks.length;
+        const doneTasks = currentListTasks.filter(({ isDone })=> isDone === true).length;
+        return (
+            `<div class="list-item-column">
+                <div class="list-item-content">
+                    <div class="list-item-head">
+                        <h1 class="title">${name}</h1>
+                        <button data-list-id="${id}" class="btn btn-list-edit extra-small">Edit</button>
+                    </div>
+                    <div class="task-progress">
+                        <p class="progress-label"><strong>${doneTasks}</strong> of ${totalTasks} tasks  is <span>done</span></p>
+                        <div class="progress-bar">
+                            <div class="indicator" style="width:${doneTasks ? calculatePercentage(doneTasks, totalTasks) : 0}%"></div>
+                        </div>
+                    </div>
+                    <button data-list-id="${id}" class="btn small task-detail-btn">View list tasks (${totalTasks})</button>
+                </div>
+            </div>`)
     };
 
     const renderLists = () => {
@@ -376,7 +367,16 @@ const renderDashboard = () => {
         const taskID = currentTarget.getAttribute("data-task-id");
         const isDone = currentTarget.checked
         updateTaskStatus(taskID, isDone);
-    }
+    };
+
+    const taskItemTemplate = (id, name, isDone) => {
+        return (
+            `<div class="task-item">
+                <input id="task-${id}" data-task-id="${id}" type="checkbox" class="checkbox task-checkbox" ${isDone ? "checked" : ""}>
+                <label for="task-${id}">${name}<label>
+            </div>`
+        )
+    };
 
     const renderTasksByListID = (id) => {
         const currentListTasks = getTasksByListID(id);
@@ -433,7 +433,6 @@ const renderDashboard = () => {
             const localStoragelistItemTemplates = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
             const filteredlistItemTemplates = localStoragelistItemTemplates.filter((list)=> list.id !== listID);
             const selectedlistItemTemplate = getListByID(listID);
-            console.log(selectedlistItemTemplate);
             const updatedlistItemTemplate = {
                 ...selectedlistItemTemplate,
                 name: listName,
@@ -498,7 +497,7 @@ const renderDashboard = () => {
         };
     };
 
-    renderHeader(userInfoEl);
+    renderHeader();
     renderLists();
 
     modalOpenBtnEls.forEach(modalToggleBtn => modalToggleBtn.onclick = handleModalOpenClick);
