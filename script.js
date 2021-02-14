@@ -7,7 +7,6 @@ const LOCALSTORAGE_KEYS = {
 
 const appEl = document.getElementById('app');
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
-let selectedListID = "";
 
 const generateUUID = () => {
     let d = new Date().getTime();
@@ -245,6 +244,7 @@ const renderDashboard = () => {
     const modalCloseBtnEls = document.querySelectorAll(".modal-close-btn");
     const createListBtnEl = document.getElementById("create-list-btn");
     const updateListBtn = document.getElementById("edit-list-btn");
+    let selectedListID = "";
 
     const toggleModal = (currentModalName, action) => {
         const addOrRemoveClass = action === "open" ? "add" : "remove";
