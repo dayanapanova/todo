@@ -1,3 +1,4 @@
+// Object with keys of the LOCAL STORAGE
 const LOCALSTORAGE_KEYS = {
     USERS_DATA: 'userData',
     CURRENT_USER: 'currentUser',
@@ -5,9 +6,13 @@ const LOCALSTORAGE_KEYS = {
     TASKS: 'tasks'
 };
 
+// appEl is the element that we wil fill with the dashboard screen or with the authscreen.
 const appEl = document.getElementById('app');
+
+// this checks in the local storage if there is a current user set. If there is a current uset set, that will redirect us to the authscreen.
 const isAuthentificated = Boolean(localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER));
 
+// function that generates unical IDs with Math.Random(); Every task and list has a unical id.
 const generateUUID = () => {
     let d = new Date().getTime();
     const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -18,10 +23,13 @@ const generateUUID = () => {
     return uuid;
 };
 
+// Takes the number of tasks that are ready and the total value ot tasks and returns the percantege of finished tasks.
 const calculatePercentage = (particalValue, totalValue) => {
     return (particalValue * 100) / totalValue;
 };
 
+// This function accepts as a first parameturn the form as a DOM Element and second parameter validations as a array of objects,
+// consisting the filed name, massage and filed type.
 const validate = (form, validations) => {
     const errors = [];
     validations.map(({ field, message, fieldType })=> {
@@ -31,11 +39,11 @@ const validate = (form, validations) => {
         if(errorContainer) {
             errorContainer.remove();
         }
+        formField.classList.remove('has-error');
         const mapFieldTypeValues = {
             input: "value",
             checkbox: "checked",
         }
-        formField.classList.remove('has-error');
         const fieldIsInvalid = !formField[mapFieldTypeValues[fieldType]];
         if(fieldIsInvalid) {
             errors.push({
@@ -59,49 +67,54 @@ const validate = (form, validations) => {
     };
 };
 
+// Accepts key and default value. Gets from the local storage data and parse the data to JSON.
 const getLocalStorage = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) ?? defaultValue;
 
+// Accepts key and data which is JSON, stringifies the data and set the data in local storage.
 const setLocalStorage = (key, data) => localStorage.setItem(key,JSON.stringify(data));
 
-const filterCurrentUserLists = (lists) => {
-    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-    return lists.filter((list) => list.userEmail === currentUserEmail) ?? [];
-};
-
-const getCurrentUser = (email) => {
+// Accepts email of the user and returns object with all of the user data.
+const getCurrentUserData = (email) => {
     const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
     return usersData.filter((user) => user.email === email)[0] ?? {};
 };
 
+// Accepts id as a parameter and get from the local storage the list, checks if the list is the same.
 const getListByID = (id) => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
     const selectedList = localStorageLists.filter((list) => list.id === id)[0];
     return selectedList;
 };
 
+// Accepts id as a parameter and gets from the local storage the tasks, checkes if the task id is the same.
 const getTaskByID = (id) => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const selectedTask = localStorageLists.filter((list) => list.id === id)[0];
     return selectedTask;
 };
 
+// Accepts id as a parameter, gets the list id, and the filters the tasks associate with the current list id.
 const getTasksByListID = (id) => {
     const localStorageTasks = getLocalStorage(LOCALSTORAGE_KEYS.TASKS, []);
     const currentListTasks = localStorageTasks.filter((task) => task.listID === id);
     return currentListTasks;
 };
 
+// Gets the lists of the user that is logged in.
 const getCurrentUserLists = () => {
     const localStorageLists = getLocalStorage(LOCALSTORAGE_KEYS.LISTS, []);
-    const currentUserLists = filterCurrentUserLists(localStorageLists);
+    const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
+    const currentUserLists = localStorageLists.filter((list) => list.userEmail === currentUserEmail) ?? [];
     return currentUserLists;
 };
 
+// Accepts the email of the user, sets the email in the local storage and then renders the dashboard.
 const authentificate = (email) => {
     localStorage.setItem(LOCALSTORAGE_KEYS.CURRENT_USER, email);
     renderDashboard();
 };
 
+// This is the template for the dashboard.
 const dashboardTemplate = () => {
     return (`
         <div class="dashboard-screen">
@@ -175,6 +188,7 @@ const dashboardTemplate = () => {
     `)
 };
 
+// This is the template form the authscreen.
 const authScreenTemplate = () => {
     return (`
         <div class="auth-screen">
@@ -230,6 +244,8 @@ const authScreenTemplate = () => {
     `)
 };
 
+
+// This is a function that renders the div app in index.html with the dashboard template.
 const renderDashboard = () => {
     appEl.innerHTML = dashboardTemplate();
 
@@ -258,7 +274,7 @@ const renderDashboard = () => {
 
     const renderHeader = () => {
         const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-        const { firstname, lastname } = getCurrentUser(currentUserEmail);
+        const { firstname, lastname } = getCurrentUserData(currentUserEmail);
         userInfoEl.innerHTML = `${firstname} ${lastname}`;
     };
 
@@ -508,7 +524,10 @@ const renderDashboard = () => {
     logOutBtnEl.onclick = handleLogOutClick;
 };
 
+
+// This is a function that renders the div app in index.html with the authscreen template.
 const renderAuthScreen = () => {
+    // Inject in the div app the template string for the authscreen.
     appEl.innerHTML = authScreenTemplate();
 
     const tabBtnEls = document.querySelectorAll(".tab-btn");
@@ -516,6 +535,9 @@ const renderAuthScreen = () => {
     const submitRegisterBtnEl = document.getElementById("submit-register-btn");
     const submitLoginBtnEl = document.getElementById("submit-login-btn");
 
+    // Accepts the user data which is user email, first name, last name and paswword. Checks if the user
+    // exist. If the user doesn't exist, creates a new user and calls authentificated function.
+    // If the user exist it throws and error.
     const register = (newUserData) => {
         const localStorageCurrentUsers = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
         // check if user exist
@@ -529,8 +551,9 @@ const renderAuthScreen = () => {
         }
     };
 
+    // Accepts userData. Checks if the password is the same, and if it isn't throws an error.
     const login = (userData) => {
-        const selectedUser = getCurrentUser(userData.email);
+        const selectedUser = getCurrentUserData(userData.email);
         if (userData.password === selectedUser.password) {
             authentificate(userData.email);
         } else {
@@ -538,6 +561,7 @@ const renderAuthScreen = () => {
         }
     };
 
+    // This function is called when the submit button is pressed.
     const handleRegisterFormSubmit = (ev) => {
         ev.preventDefault();
         const registerForm = document.forms["register-form"];
@@ -568,6 +592,7 @@ const renderAuthScreen = () => {
                 message: "Please accept terms of use"
             }
         ]
+        // Validate accepts the form and validations.
         const { isValid } = validate(registerForm, validations);
 
         if(isValid) {
@@ -580,6 +605,7 @@ const renderAuthScreen = () => {
         }
     };
 
+    // This function is called when the login button is pressed 
     const handleLoginFormSubmit = (ev) => {
         ev.preventDefault();
         const loginForm = document.forms["login-form"];
@@ -598,6 +624,7 @@ const renderAuthScreen = () => {
 
         const { isValid } = validate(loginForm, validations);
 
+        // If the form is valid we call the login function with email and password.
         if(isValid) {
             login({
                 email: loginForm["login-email"].value,
@@ -605,7 +632,7 @@ const renderAuthScreen = () => {
             });
         }
     };
-
+    // This function is waiting for the name of the tab.
     const changeTab = (currentTab) => {
         const setActiveClassName = (tabs) => {
             tabs.forEach((tabItem) => {
@@ -620,23 +647,30 @@ const renderAuthScreen = () => {
         setActiveClassName(allTabsItemsEls);
         setActiveClassName(tabBtnEls);
     };
-
+    // We call this function this way, so we can open by default the login tab.
     changeTab("login-tab");
 
+    // This function gets the id of the tab, so it can change it.
     const handleTabClick = (ev) => {
+        ev.preventDefault();
         const currentTab = ev.target.getAttribute("data-tab");
         changeTab(currentTab);
     };
-
+    
+    // Here we attach all of the events, associate with the authscreen.
     tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
     submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
     submitLoginBtnEl.onclick = handleLoginFormSubmit;
 };
 
+// Event that checheks if the page is loaded.
 window.onload = () => {
+    // After the page is loaded we check if the user is authentificated.
     if (isAuthentificated) {
+        // If the user is authentificated we render the dashboard.
         renderDashboard();
     } else {
+        // If the user isn't authentificated we rendern the authscreen.
         renderAuthScreen();
     }
 };
