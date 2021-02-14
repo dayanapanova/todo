@@ -74,7 +74,7 @@ const getLocalStorage = (key, defaultValue = null) => JSON.parse(localStorage.ge
 const setLocalStorage = (key, data) => localStorage.setItem(key,JSON.stringify(data));
 
 // Accepts email of the user and returns object with all of the user data.
-const getCurrentUserData = (email) => {
+const getUserDataByEmail = (email) => {
     const usersData = getLocalStorage(LOCALSTORAGE_KEYS.USERS_DATA, []);
     return usersData.filter((user) => user.email === email)[0] ?? {};
 };
@@ -262,7 +262,9 @@ const renderDashboard = () => {
     const updateListBtn = document.getElementById("edit-list-btn");
     let selectedListID = "";
 
+    // Accpets as a parametar the name of the current modal and the action as a second.
     const toggleModal = (currentModalName, action) => {
+        // If the action is open return string add, if the action is close, return string remove. 
         const addOrRemoveClass = action === "open" ? "add" : "remove";
         modalEls.forEach((modal) => {
             const modalName = modal.getAttribute("data-name");
@@ -272,12 +274,14 @@ const renderDashboard = () => {
         });
     };
 
+    // Accepts the user email and sets the first and the last name in the header 
     const renderHeader = () => {
         const currentUserEmail = localStorage.getItem(LOCALSTORAGE_KEYS.CURRENT_USER);
-        const { firstname, lastname } = getCurrentUserData(currentUserEmail);
+        const { firstname, lastname } = getUserDataByEmail(currentUserEmail);
         userInfoEl.innerHTML = `${firstname} ${lastname}`;
     };
 
+    // Accpets the id and the name of the list, renders the list template.
     const listItemTemplate = (id, name) => {
         const currentListTasks = getTasksByListID(id);
         const totalTasks = currentListTasks.length;
@@ -300,18 +304,13 @@ const renderDashboard = () => {
             </div>`)
     };
 
+    // Renders the lists of the current user.
     const renderLists = () => {
         const currentUserLists = getCurrentUserLists();
         const listsDomData = currentUserLists.map(({ id, name }) => listItemTemplate(id, name));
         listsEl.innerHTML = listsDomData;
         const detailButtons = document.querySelectorAll(".task-detail-btn");
         const editListsButtons = document.querySelectorAll(".btn-list-edit");
-
-        const fillUpdateListForm = () => {
-            const editListForm = document.forms["edit-list-form"];
-            const selectedlistItemTemplate = getListByID(selectedListID);
-            editListForm["edit-list-name-input"].value = selectedlistItemTemplate.name;
-        };
 
         const handleTaskDetailBtnClick = (ev) => {
             const listID = ev.target.getAttribute("data-list-id");
@@ -321,6 +320,13 @@ const renderDashboard = () => {
             openModal("tasks-list-modal");
             renderTasksByListID(listID);
         };
+
+        const fillUpdateListForm = () => {
+            const editListForm = document.forms["edit-list-form"];
+            const selectedlistItemTemplate = getListByID(selectedListID);
+            editListForm["edit-list-name-input"].value = selectedlistItemTemplate.name;
+        };
+
 
         const handleOpenListUpdateForm = (ev) => {
             ev.preventDefault();
@@ -553,7 +559,7 @@ const renderAuthScreen = () => {
 
     // Accepts userData. Checks if the password is the same, and if it isn't throws an error.
     const login = (userData) => {
-        const selectedUser = getCurrentUserData(userData.email);
+        const selectedUser = getUserDataByEmail(userData.email);
         if (userData.password === selectedUser.password) {
             authentificate(userData.email);
         } else {
@@ -656,7 +662,7 @@ const renderAuthScreen = () => {
         const currentTab = ev.target.getAttribute("data-tab");
         changeTab(currentTab);
     };
-    
+
     // Here we attach all of the events, associate with the authscreen.
     tabBtnEls.forEach(tab => tab.onclick = handleTabClick);
     submitRegisterBtnEl.onclick = handleRegisterFormSubmit;
